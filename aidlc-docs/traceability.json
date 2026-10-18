@@ -1,0 +1,107 @@
+[
+  {
+    "id": "M-01",
+    "sources": [
+      "src/domain/questions.ts",
+      "src/domain/progress.ts",
+      "src/storage/profile.ts"
+    ],
+    "tests": [
+      "all 246 source questions preserve valid IDs and answer grading",
+      "SQLite persistence saves, reloads, replaces and deletes a profile"
+    ]
+  },
+  {
+    "id": "M-02",
+    "sources": [
+      "src/domain/navigation.ts",
+      "src/ui/ScreenHost.tsx",
+      "src/screens/QuizScreen.tsx",
+      "App.tsx",
+      "src/hooks/useLearningSession.ts"
+    ],
+    "tests": ["main tab round trips resume the previous Practice view"],
+    "manual": "Tab state, scroll and Settings draft round trips on tablet"
+  },
+  {
+    "id": "M-03",
+    "sources": [
+      "src/components/QuestionExplanation.tsx",
+      "src/domain/resources.ts"
+    ],
+    "tests": [
+      "mobile learning resources preserve every source screenshot/video mapping"
+    ],
+    "manual": "Screenshot enlargement and player load"
+  },
+  {
+    "id": "M-04",
+    "sources": [
+      "src/ui/theme.ts",
+      "src/ui/primitives.tsx",
+      "src/screens/DashboardScreen.tsx"
+    ],
+    "tests": [],
+    "manual": "Icon labels, contrast and layouts on tablet and phone"
+  },
+  {
+    "id": "M-05",
+    "sources": [
+      "src/hooks/useReducedMotion.ts",
+      "src/ui/primitives.tsx",
+      "src/ui/ScreenHost.tsx"
+    ],
+    "tests": [],
+    "manual": "Reduced Motion and accessible touch targets"
+  },
+  {
+    "id": "M-06",
+    "sources": ["assets/app-icon.png", "assets/adaptive-icon.png", "app.json"],
+    "tests": [],
+    "manual": "Launcher icon in native installation"
+  },
+  {
+    "id": "M-07",
+    "sources": [
+      "src/domain/backup.ts",
+      "src/hooks/useVoice.ts",
+      "src/screens/SettingsScreen.tsx"
+    ],
+    "tests": [
+      "backup round trip reconstructs statistics and rejects malformed histories",
+      "spoken answers map letters and ordinals to actual options"
+    ]
+  },
+  {
+    "id": "M-08",
+    "sources": ["ARCHITECTURE.md", "AGENTS.md", "scripts/validate-aidlc.cjs"],
+    "tests": [],
+    "manual": "Lifecycle validator and review of evidence"
+  },
+  {
+    "id": "M-09",
+    "sources": [
+      "src/auth/google.ts",
+      "src/domain/identity.ts",
+      "src/components/GoogleAccountButton.tsx",
+      "app.config.ts"
+    ],
+    "tests": [
+      "Google linking preserves guest progress, blocks silent account mixing and excludes identity from backups"
+    ],
+    "manual": "Real Google sign-in with owner OAuth registration and device Play services"
+  },
+  {
+    "id": "M-10",
+    "sources": [
+      "src/screens/LibraryScreen.tsx",
+      "src/domain/resources.ts",
+      "src/components/MediaViewer.tsx",
+      "src/components/LearningVideo.tsx"
+    ],
+    "tests": [
+      "media library filters expose only mapped questions and support exact question search"
+    ],
+    "manual": "In-app screenshot viewer and YouTube playback on tablet"
+  }
+]

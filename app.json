@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Salesforce Admin Quiz 2026",
+    "slug": "salesforce-admin-quiz-2026",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mdferdousakhter.salesforceadminquiz2026",
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Allow this app to recognize spoken quiz answers.",
+        "NSMicrophoneUsageDescription": "Allow this app to hear your spoken quiz answers."
+      }
+    },
+    "android": {
+      "package": "com.mdferdousakhter.salesforceadminquiz2026",
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#005044"
+      }
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-document-picker",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow this app to hear your spoken quiz answers.",
+          "speechRecognitionPermission": "Allow this app to recognize spoken quiz answers."
+        }
+      ]
+    ],
+    "extra": {
+      "publisher": "MD Ferdous AKhter",
+      "eas": {
+        "projectId": "a9744f1d-2697-4a48-b5c5-6d635a6f5732"
+      }
+    },
+    "icon": "./assets/app-icon.png"
+  }
+}

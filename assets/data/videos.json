@@ -1,0 +1,1155 @@
+{
+  "reviewPolicy": "Use each question\u2019s existing primary documentation and option rationale for written justification. Videos are explicitly assigned by question, not inherited from broad topic categories. Only official YouTube metadata-reviewed videos are embeddable. Re-review within 180 Dhaka calendar days.",
+  "resources": [
+    {
+      "id": "record-types",
+      "title": "What are Record Types?",
+      "url": "https://www.youtube.com/watch?v=7m6nJ3zWzaE",
+      "kind": "video",
+      "youtubeId": "7m6nJ3zWzaE",
+      "startSeconds": 80,
+      "publisher": "Salesforce Support",
+      "description": "Short walkthrough of business processes, layouts, picklist values, and record type assignment.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Official Salesforce Support title, channel, and embed metadata checked through YouTube oEmbed on 2026-10-16. Embedded playback tested successfully in the local app, starting at the picklist-values chapter (1:20). The video was published in 2023; interface details may differ and playback can depend on browser or region."
+    },
+    {
+      "id": "field-security",
+      "title": "What is Field Level Security?",
+      "url": "https://www.youtube.com/watch?v=8AFesZY9fak",
+      "kind": "video",
+      "youtubeId": "8AFesZY9fak",
+      "startSeconds": 0,
+      "publisher": "Salesforce Support",
+      "description": "Understand how field permissions control whether a field can be viewed or edited.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Official Salesforce Support title, channel, and embed metadata checked through YouTube oEmbed on 2026-10-16. Published in 2023; interface details may differ. Playback can depend on the browser or region."
+    },
+    {
+      "id": "sharing-rules",
+      "title": "Record Access with Sharing Rules",
+      "url": "https://www.youtube.com/watch?v=pXkX17G5ldo",
+      "kind": "video",
+      "youtubeId": "pXkX17G5ldo",
+      "startSeconds": 0,
+      "publisher": "Salesforce Support",
+      "description": "See how sharing rules extend record access beyond the default baseline.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Official Salesforce Support title, channel, and embed metadata checked through YouTube oEmbed on 2026-10-16. Published in 2023; interface details may differ. Playback can depend on the browser or region."
+    },
+    {
+      "id": "role-hierarchy",
+      "title": "Grant Record Access with Role Hierarchy",
+      "url": "https://www.youtube.com/watch?v=IFvxTbMkY9Q",
+      "kind": "video",
+      "youtubeId": "IFvxTbMkY9Q",
+      "startSeconds": 0,
+      "publisher": "Salesforce Support",
+      "description": "Understand inherited record access and the role hierarchy.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Official Salesforce Support title, channel, and embed metadata checked through YouTube oEmbed on 2026-10-16. Published in 2023; interface details may differ. Playback can depend on the browser or region."
+    },
+    {
+      "id": "object-permissions",
+      "title": "Control Object Access with Profiles and Permission Sets",
+      "url": "https://www.youtube.com/watch?v=kOOS3vmYJFc",
+      "kind": "video",
+      "youtubeId": "kOOS3vmYJFc",
+      "startSeconds": 0,
+      "publisher": "Salesforce Support",
+      "description": "Learn which settings grant create, read, edit, and delete access to an object.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Official Salesforce Support title, channel, and embed metadata checked through YouTube oEmbed on 2026-10-16. Published in 2023; interface details may differ. Playback can depend on the browser or region."
+    },
+    {
+      "id": "sharing-defaults",
+      "title": "Organization-Wide Defaults",
+      "url": "https://www.youtube.com/watch?v=zlX0Lipc_Gg",
+      "kind": "video",
+      "youtubeId": "zlX0Lipc_Gg",
+      "startSeconds": 79,
+      "publisher": "Salesforce Support",
+      "description": "Understand private and public record-access baselines.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Official Salesforce Support title, channel, and embed metadata checked through YouTube oEmbed on 2026-10-16. Published in 2023; interface details may differ. Playback can depend on the browser or region."
+    }
+  ],
+  "questionResources": {
+    "1": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "2": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "3": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "4": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "5": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "6": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "7": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "8": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "9": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "10": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "11": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "12": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "13": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "14": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "15": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "16": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "17": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "18": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "19": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "20": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "21": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "22": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "23": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "24": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "25": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "26": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "27": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "28": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "29": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "30": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "31": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "32": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "33": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "34": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "35": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "36": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "37": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "38": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "39": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "40": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "41": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "42": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "43": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "44": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "45": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "46": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "47": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "48": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "49": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "50": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "51": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "52": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "53": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "54": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "55": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "56": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "57": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "58": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "59": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "60": {
+      "resourceIds": [
+        "object-permissions"
+      ],
+      "relevance": {
+        "object-permissions": "Explains object permissions and how profiles and permission sets grant access, which distinguishes these options from sharing or display settings."
+      }
+    },
+    "61": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "62": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "63": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "64": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "65": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "66": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "67": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "68": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "69": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "70": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "71": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "72": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "73": {
+      "resourceIds": [
+        "object-permissions"
+      ],
+      "relevance": {
+        "object-permissions": "Explains object permissions and how profiles and permission sets grant access, which distinguishes these options from sharing or display settings."
+      }
+    },
+    "74": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "75": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "76": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "77": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "78": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "79": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "80": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "81": {
+      "resourceIds": [
+        "sharing-rules"
+      ],
+      "relevance": {
+        "sharing-rules": "Explains how ownership- or criteria-based sharing opens access across groups beyond the role hierarchy or private default."
+      }
+    },
+    "82": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "83": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "84": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "85": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "86": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "87": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "88": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "89": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "90": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "91": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "92": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "93": {
+      "resourceIds": [
+        "field-security"
+      ],
+      "relevance": {
+        "field-security": "Explains field visibility and editability, the field-access part of this question. The page-layout troubleshooting step is covered separately in the written references."
+      }
+    },
+    "94": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "95": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "96": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "97": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "98": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "99": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "100": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "101": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "102": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "103": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "104": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "105": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "106": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "107": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "108": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "109": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "110": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "111": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "112": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "113": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "114": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "115": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "116": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "117": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "118": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "119": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "120": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "121": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "122": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "123": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "124": {
+      "resourceIds": [
+        "sharing-rules",
+        "role-hierarchy"
+      ],
+      "relevance": {
+        "sharing-rules": "These two short videos explain the two accepted mechanisms: sharing rules and role-hierarchy inheritance. Profiles and external sharing sets solve different access problems.",
+        "role-hierarchy": "These two short videos explain the two accepted mechanisms: sharing rules and role-hierarchy inheritance. Profiles and external sharing sets solve different access problems."
+      }
+    },
+    "125": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "126": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "127": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "128": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "129": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "130": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "131": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "132": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "133": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "134": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "135": {
+      "resourceIds": [
+        "object-permissions"
+      ],
+      "relevance": {
+        "object-permissions": "Explains object permissions and how profiles and permission sets grant access, which distinguishes these options from sharing or display settings."
+      }
+    },
+    "136": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "137": {
+      "resourceIds": [
+        "object-permissions"
+      ],
+      "relevance": {
+        "object-permissions": "Explains object permissions and how profiles and permission sets grant access, which distinguishes these options from sharing or display settings."
+      }
+    },
+    "138": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "139": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "140": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "141": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "142": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "143": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "144": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "145": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "146": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "147": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "148": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "149": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "150": {
+      "resourceIds": [
+        "role-hierarchy",
+        "sharing-defaults"
+      ],
+      "relevance": {
+        "role-hierarchy": "Explains the record-access baseline and inherited access. Read the question-specific documentation for disabling hierarchy inheritance on custom objects.",
+        "sharing-defaults": "Explains the record-access baseline and inherited access. Read the question-specific documentation for disabling hierarchy inheritance on custom objects."
+      }
+    },
+    "151": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "152": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "153": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "154": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "155": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "156": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "157": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "158": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "159": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "160": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "161": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "162": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "163": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "164": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "165": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "166": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "167": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "168": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "169": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "170": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "171": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "172": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "173": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "174": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "175": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "176": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "177": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "178": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "179": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "180": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "181": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "182": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "183": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "184": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "185": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "186": {
+      "resourceIds": [
+        "object-permissions"
+      ],
+      "relevance": {
+        "object-permissions": "Explains object permissions and how profiles and permission sets grant access, which distinguishes these options from sharing or display settings."
+      }
+    },
+    "187": {
+      "resourceIds": [
+        "sharing-rules"
+      ],
+      "relevance": {
+        "sharing-rules": "Explains how ownership- or criteria-based sharing opens access across groups beyond the role hierarchy or private default."
+      }
+    },
+    "188": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "189": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "190": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "191": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "192": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "193": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "194": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "195": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "196": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "197": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "198": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "199": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "200": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "201": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "202": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "203": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "204": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "205": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "206": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "207": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "208": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "209": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "210": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "211": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "212": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "213": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "214": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "215": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "216": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "217": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "218": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "219": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "220": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "221": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "222": {
+      "resourceIds": [
+        "object-permissions"
+      ],
+      "relevance": {
+        "object-permissions": "Explains object permissions and how profiles and permission sets grant access, which distinguishes these options from sharing or display settings."
+      }
+    },
+    "223": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "224": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "225": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "226": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "227": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "228": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "229": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "230": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "231": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "232": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "233": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "234": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "235": {
+      "resourceIds": [
+        "record-types"
+      ],
+      "relevance": {
+        "record-types": "Shows how record types connect business processes, page layouts, and picklist choices; compare those controls with the alternatives in this question."
+      }
+    },
+    "236": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "237": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "238": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "239": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "240": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "241": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "242": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "243": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "244": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "245": {
+      "resourceIds": [],
+      "relevance": {}
+    },
+    "246": {
+      "resourceIds": [],
+      "relevance": {}
+    }
+  }
+}

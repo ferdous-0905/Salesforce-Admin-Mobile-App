@@ -1,0 +1,257 @@
+{
+  "reviewPolicy": "Only genuine screenshots from reviewed official documentation, attached by explicit question match. Preserve provenance and original bytes; no invented Salesforce UI or generic fallback. Inherit full-explanation entitlement and 180-day review expiry.",
+  "resources": [
+    {
+      "id": "picklist-selected",
+      "kind": "screenshot",
+      "title": "Edit a record type\u2019s picklist choices",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-record-types",
+      "publisher": "Salesforce Trailhead",
+      "description": "Compare available values with the choices selected for one record type.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Genuine screenshot from the linked public Trailhead lesson, visually inspected on 2026-10-16. Example data and original annotations belong to Salesforce. Labels and available options can differ by release and org.",
+      "screenshot": {
+        "imagePath": "/learning/screenshots/picklist-selected.jpg",
+        "originalImageUrl": "https://res.cloudinary.com/hy4kyit2a/f_auto/fl_lossy/q_70/learn/projects/customize-a-salesforce-object/create-record-types/images/7c0a5cc45fb468e7728f785e211af62d_kix.tmiwyl9pkdun.png",
+        "width": 410,
+        "height": 363,
+        "sha256": "30425b53338bf85cba5038e12d8c65f31904b54a237571db7ff8b8d34c3248b6",
+        "alt": "Salesforce Picklist Values editor with Available Values on the left, Selected Values on the right, and a highlighted Remove arrow.",
+        "caption": "The lesson highlights removing values from this record type\u2019s selected list. This changes the allowed subset, not the field\u2019s shared value definition.",
+        "navigationPath": "Setup \u2192 Object Manager \u2192 Object \u2192 Record Types \u2192 Record type \u2192 Picklist field",
+        "keyPoints": [
+          "Selected Values are the choices offered for that record type.",
+          "Available Values and the Add/Remove controls let an administrator adjust the subset."
+        ]
+      }
+    },
+    {
+      "id": "picklist-subset",
+      "kind": "screenshot",
+      "title": "Compare available and selected values",
+      "url": "https://trailhead.salesforce.com/content/learn/projects/customize-a-salesforce-object/create-record-types",
+      "publisher": "Salesforce Trailhead",
+      "description": "See the record-type-specific subset beside other available field values.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Genuine screenshot from the linked public Trailhead lesson, visually inspected on 2026-10-16. Example data and original annotations belong to Salesforce. Labels and available options can differ by release and org.",
+      "screenshot": {
+        "imagePath": "/learning/screenshots/picklist-subset.jpg",
+        "originalImageUrl": "https://res.cloudinary.com/hy4kyit2a/f_auto/fl_lossy/q_70/learn/projects/customize-a-salesforce-object/create-record-types/images/eba877faa45e686b4d8bea97e56fc937_kix.c2zaza712b0v.png",
+        "width": 362,
+        "height": 318,
+        "sha256": "c18fc12467dde7d2a17b86379edbd672d1bfe071a00a64f7771c2b28a655f495",
+        "alt": "Salesforce Picklist Values editor with three available choices and four selected partner-related choices, highlighted in the original lesson.",
+        "caption": "This partner example shows that a field can retain other available choices while one record type offers only selected values.",
+        "navigationPath": "Setup \u2192 Object Manager \u2192 Object \u2192 Record Types \u2192 Record type \u2192 Picklist field",
+        "keyPoints": [
+          "The right-hand list is the allowed subset for this record type.",
+          "A global value set defines reusable values; this screen selects which values a record type offers."
+        ]
+      }
+    },
+    {
+      "id": "field-permissions",
+      "kind": "screenshot",
+      "title": "Read and Edit permissions for individual fields",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data_security/data_security_fields",
+      "publisher": "Salesforce Trailhead",
+      "description": "Compare readable, editable, and hidden fields in a permission set.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Genuine screenshot from the linked public Trailhead lesson, visually inspected on 2026-10-16. Example data and original annotations belong to Salesforce. Labels and available options can differ by release and org.",
+      "screenshot": {
+        "imagePath": "/learning/screenshots/field-permissions.jpg",
+        "originalImageUrl": "https://res.cloudinary.com/hy4kyit2a/f_auto/fl_lossy/q_70/learn/modules/data_security/data_security_fields/images/72ef9c5071395c9a6e0f623b189ce8db_kix.vjvmoqbjd8mp.png",
+        "width": 1238,
+        "height": 850,
+        "sha256": "8852dd999b7e81cb62c28e95aa9e09001ad1c064e6d7cb783c4b49aa004248b4",
+        "alt": "Salesforce Field Permissions table showing Field Name, API Name, Read Access, and Edit Access; some rows are read-only and others have neither permission.",
+        "caption": "The Candidate example separates field visibility from editability. It does not replace the page-layout check when troubleshooting a missing field.",
+        "navigationPath": "Setup \u2192 Permission Sets \u2192 Permission set \u2192 Object Settings \u2192 Object \u2192 Edit",
+        "keyPoints": [
+          "Read Access and Edit Access are independent controls to inspect.",
+          "Compare a row with Read only against a row with both boxes checked."
+        ]
+      }
+    },
+    {
+      "id": "validation-rule",
+      "kind": "screenshot",
+      "title": "See a validation error when saving a record",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/point_click_business_logic/validation_rules",
+      "publisher": "Salesforce Trailhead",
+      "description": "See how a validation rule blocks an invalid save with a useful error message.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Genuine screenshot from the linked public Trailhead lesson, visually inspected on 2026-10-16. Example data and original annotations belong to Salesforce. Labels and available options can differ by release and org.",
+      "screenshot": {
+        "imagePath": "/learning/screenshots/validation-rule.jpg",
+        "originalImageUrl": "https://res.cloudinary.com/hy4kyit2a/f_auto/fl_lossy/q_70/learn/modules/point_click_business_logic/validation_rules/images/90a1bff4c8a13ade9abdac2da0c93a8b_kix.2mk4afoe81qc.png",
+        "width": 742,
+        "height": 502,
+        "sha256": "c3efa5c795dd0afede36ae6c3a0b6be68f9e9c6f0a2f6affac0732a078e39552",
+        "alt": "Salesforce Account edit form showing an Account Number value of 1234 and an error explaining that the number must be eight characters long.",
+        "caption": "This is the lesson\u2019s account-number example. Use the question\u2019s own conditions and formula; the pictured rule is not the exact rule for every scenario.",
+        "navigationPath": "Record page \u2192 Edit \u2192 Enter values \u2192 Save",
+        "keyPoints": [
+          "The error prevents the invalid record from being saved.",
+          "The visible message explains what must be corrected; it does not automatically change the entered value."
+        ]
+      }
+    },
+    {
+      "id": "flow-get-records",
+      "kind": "screenshot",
+      "title": "Choose what a Get Records element retrieves",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data-and-actions-in-flows/combine-variables-data-elements",
+      "publisher": "Salesforce Trailhead",
+      "description": "See object selection and condition controls in the Get Records element.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Genuine screenshot from the linked public Trailhead lesson, visually inspected on 2026-10-16. Example data and original annotations belong to Salesforce. Labels and available options can differ by release and org.",
+      "screenshot": {
+        "imagePath": "/learning/screenshots/flow-get-records.jpg",
+        "originalImageUrl": "https://res.cloudinary.com/hy4kyit2a/f_auto/fl_lossy/q_70/learn/modules/data-and-actions-in-flows/combine-variables-data-elements/images/ae8e0cdf22d851034fcfe898d3299a8b_i.13.jpg",
+        "width": 1566,
+        "height": 880,
+        "sha256": "5ac8bcef273363c4f23ffae2ec0410516195e141a2baef4734cef94a6b7b8d2b",
+        "alt": "Salesforce New Get Records panel showing a label, API Name, Opportunity Contact Role object, and All Conditions Are Met condition requirement.",
+        "caption": "The example queries Opportunity Contact Role records. Your scenario may use another object, but the Get Records controls perform the same retrieval role.",
+        "navigationPath": "Setup \u2192 Flows \u2192 Flow Builder \u2192 Add Element \u2192 Get Records",
+        "keyPoints": [
+          "Object selects the type of records to query.",
+          "Conditions identify matching records; this differs from creating or updating records."
+        ]
+      }
+    },
+    {
+      "id": "flow-store-records",
+      "kind": "screenshot",
+      "title": "Choose how many records and fields to store",
+      "url": "https://trailhead.salesforce.com/content/learn/modules/data-and-actions-in-flows/combine-variables-data-elements",
+      "publisher": "Salesforce Trailhead",
+      "description": "Compare first-record and all-record results, plus the field-storage options.",
+      "reviewedAt": "2026-10-16",
+      "reviewNote": "Genuine screenshot from the linked public Trailhead lesson, visually inspected on 2026-10-16. Example data and original annotations belong to Salesforce. Labels and available options can differ by release and org.",
+      "screenshot": {
+        "imagePath": "/learning/screenshots/flow-store-records.jpg",
+        "originalImageUrl": "https://res.cloudinary.com/hy4kyit2a/f_auto/fl_lossy/q_70/learn/modules/data-and-actions-in-flows/combine-variables-data-elements/images/e4fa16a3ff187a5721237505ecdd1e34_i.15.jpg",
+        "width": 1560,
+        "height": 610,
+        "sha256": "6a358bb27f9fc9f852ec15849a82b41b72544e9f735e0f615a509b53f3ccde99",
+        "alt": "Salesforce Get Records settings with descending CreatedDate sort, Only the first record selected, and Automatically store all fields selected.",
+        "caption": "This example retrieves the most recently created matching record and stores its fields for later flow elements.",
+        "navigationPath": "Flow Builder \u2192 Get Records \u2192 Sort and record-storage settings",
+        "keyPoints": [
+          "First record versus All records changes whether the result is a single record or a collection.",
+          "The field-storage choices control the data available to later elements."
+        ]
+      }
+    }
+  ],
+  "questionScreenshots": {
+    "1": {
+      "resourceIds": [
+        "picklist-selected",
+        "picklist-subset"
+      ],
+      "relevance": "For this question, inspect the record type\u2019s selected picklist subset and compare it with the available field values. The written reasoning explains the other options."
+    },
+    "21": {
+      "resourceIds": [
+        "picklist-selected",
+        "picklist-subset"
+      ],
+      "relevance": "For this question, inspect the record type\u2019s selected picklist subset and compare it with the available field values. The written reasoning explains the other options."
+    },
+    "49": {
+      "resourceIds": [
+        "picklist-selected",
+        "picklist-subset"
+      ],
+      "relevance": "For this question, inspect the record type\u2019s selected picklist subset and compare it with the available field values. The written reasoning explains the other options."
+    },
+    "93": {
+      "resourceIds": [
+        "field-permissions"
+      ],
+      "relevance": "For this question, distinguish field permissions from object access and page layout. The screenshot illustrates only the field-permission part of the scenario."
+    },
+    "137": {
+      "resourceIds": [
+        "field-permissions"
+      ],
+      "relevance": "For this question, distinguish field permissions from object access and page layout. The screenshot illustrates only the field-permission part of the scenario."
+    },
+    "5": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "26": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "87": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "92": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "100": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "171": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "183": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "206": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "209": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "244": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "246": {
+      "resourceIds": [
+        "validation-rule"
+      ],
+      "relevance": "This example illustrates a validation rule\u2019s save-time error. Compare that behavior with the question\u2019s alternative tools; the exact formula and conditions remain in the written explanation."
+    },
+    "38": {
+      "resourceIds": [
+        "flow-get-records",
+        "flow-store-records"
+      ],
+      "relevance": "This question asks for retrieving matching records and retaining their values. Compare the Get Records configuration and storage choices with the other listed flow elements."
+    }
+  }
+}
