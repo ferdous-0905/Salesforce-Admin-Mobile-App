@@ -1,6 +1,6 @@
 import { answerFeedback } from "../domain/answerFeedback";
 import { AnswerMarker, ResultBanner, answerPalette } from "./AnswerFeedback";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -70,7 +70,7 @@ function Action({
     />
   );
 }
-export function QuestionExplanation({
+function QuestionExplanationContent({
   question,
   selected,
   correct,
@@ -466,3 +466,5 @@ const s = StyleSheet.create({
   loading: { position: "absolute", top: "45%", left: "45%" },
   modal: { flex: 1, backgroundColor: "#f7f8f3" },
 });
+
+export const QuestionExplanation = memo(QuestionExplanationContent);

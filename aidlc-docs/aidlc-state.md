@@ -1,6 +1,4 @@
 # Lifecycle state
 
-Current intent: `intents/2026-10-19-library-progress/intent.md`.
-Status: Library references and Progress status verified on Android; 19 checks and Android bundle pass. iOS testing deferred by owner.
-
-Preserve existing profiles/progress and exact question-resource mappings. Previous mindful-interface evidence remains in its intent directory.
+Current intent: `intents/2026-10-19-responsive-navigation/intent.md`.
+Status: Responsiveness changes complete. 22 tests and Android/web exports pass; browser state and scroll retention verified. Physical-device profiling not measured; iOS deferred.

@@ -1,8 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import { Alert, BackHandler, Keyboard, ScrollView } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import { File, Paths } from "expo-file-system";
-import * as Sharing from "expo-sharing";
+import { BackHandler, Keyboard, ScrollView } from "react-native";
+import { showMessage, confirmReplacement } from "../platform/dialogs";
+import { exportBackupFile, pickBackupText } from "../platform/backupTransfer";
 import type { Question, UserProgress, PracticeMode } from "../domain/models";
 import {
   isCorrect,
@@ -32,7 +31,6 @@ import { useVoice } from "./useVoice";
 import type { QuizVisit } from "../domain/models";
 export function useLearningSession(bank: readonly Question[]) {
   const scroll = useRef<ScrollView>(null);
-  const revealAfterSubmit = useRef(false);
   const [profile, setProfile] = useState<UserProgress | null>(null);
   const [ready, setReady] = useState(false);
   const [initialError, setInitialError] = useState("");
@@ -105,7 +103,7 @@ export function useLearningSession(bank: readonly Question[]) {
     try {
       await action();
     } catch (e) {
-      Alert.alert(
+      showMessage(
         "Could not complete action",
         e instanceof Error ? e.message : "Please try again.",
       );
@@ -119,7 +117,7 @@ export function useLearningSession(bank: readonly Question[]) {
     voice.stop();
     const question = selectQuestion(bank, profile, nextMode);
     if (!question) {
-      Alert.alert("All caught up", "There are no failed questions to review.");
+      showMessage("All caught up", "There are no failed questions to review.");
       return;
     }
     setMode(nextMode);
@@ -137,7 +135,7 @@ export function useLearningSession(bank: readonly Question[]) {
     }
     const question = selectQuestion(bank, profile, mode);
     if (!question) {
-      Alert.alert("Review complete", "No failed questions remain.");
+      showMessage("Review complete", "No failed questions remain.");
       navigate("home");
       return;
     }
@@ -161,7 +159,6 @@ export function useLearningSession(bank: readonly Question[]) {
         attemptedAt: new Date().toISOString(),
       }),
     );
-    revealAfterSubmit.current = true;
     updateVisit({ ...current, submitted: true, correct });
   }
   function toggle(id: string) {
@@ -178,43 +175,21 @@ export function useLearningSession(bank: readonly Question[]) {
     });
   }
   async function exportBackup() {
-    if (!profile) return;
-    const file = new File(Paths.cache, "salesforce-admin-quiz-backup.json");
-    file.write(encodeBackup(profile));
-    if (await Sharing.isAvailableAsync())
-      await Sharing.shareAsync(file.uri, {
-        mimeType: "application/json",
-        dialogTitle: "Save your progress backup",
-      });
-    else throw new Error("File sharing is unavailable on this device.");
+    if (profile) await exportBackupFile(encodeBackup(profile));
   }
   async function importBackup() {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: ["application/json", "text/plain"],
-      copyToCacheDirectory: true,
-    });
-    if (result.canceled) return;
-    const file = new File(result.assets[0].uri);
-    if (file.size > 20_000_000) throw new Error("Backup is too large.");
-    const imported = decodeBackup(await file.text(), bank);
-    Alert.alert(
+    const text = await pickBackupText();
+    if (text === null) return;
+    const imported = decodeBackup(text, bank);
+    if (await confirmReplacement(
       "Replace current progress?",
       `Import ${imported.name} with ${imported.statistics.totalAttempts} graded attempts? Export your current progress first if you want to keep it.`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Replace",
-          style: "destructive",
-          onPress: () =>
-            void guarded(async () => {
-              await persist(imported);
-              setName(imported.name);
-              setVisits([]);
-              navigate("home");
-            }),
-        },
-      ],
-    );
+    )) {
+      await persist(imported);
+      setName(imported.name);
+      setVisits([]);
+      navigate("home");
+    }
   }
 
   return {
@@ -237,7 +212,6 @@ export function useLearningSession(bank: readonly Question[]) {
     next,
     toggle,
     scroll,
-    revealAfterSubmit,
     submit: () => void guarded(submit),
     exportBackup: () => void guarded(exportBackup),
     importBackup: () => void guarded(importBackup),
@@ -251,7 +225,14 @@ export function useLearningSession(bank: readonly Question[]) {
       }),
     createProfile: () => void guarded(() => persist(newProfile(name))),
     saveName: () =>
-      void guarded(() => persist({ ...profile!, name: name.trim() })),
+      void guarded(async () => {
+        const savedName = name.trim();
+        if (!savedName || savedName.length > 80) {
+          throw new Error("Use a name between 1 and 80 characters.");
+        }
+        await persist({ ...profile!, name: savedName });
+        setName(savedName);
+      }),
     previous: () => {
       voice.stop();
       setPosition((value) => Math.max(0, value - 1));

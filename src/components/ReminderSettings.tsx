@@ -1,3 +1,4 @@
+import { readApproximateLocation } from "../hooks/readApproximateLocation";
 import React, { useState } from "react";
 import { Linking, Platform, Switch, Text, TextInput, View } from "react-native";
 import {
@@ -136,18 +137,9 @@ export function ReminderSettings({
               setLocating(true);
               setError("");
               void (async () => {
-                const location = await import("expo-location");
-                const permission =
-                  await location.requestForegroundPermissionsAsync();
-                if (!permission.granted)
-                  throw new Error(
-                    "Location was not allowed. Enter approximate coordinates below or choose daytime hours.",
-                  );
-                const position = await location.getCurrentPositionAsync({
-                  accuracy: location.Accuracy.Low,
-                });
-                setLatitude(position.coords.latitude.toFixed(2));
-                setLongitude(position.coords.longitude.toFixed(2));
+                const coordinates = await readApproximateLocation();
+                setLatitude(coordinates.latitude.toFixed(2));
+                setLongitude(coordinates.longitude.toFixed(2));
               })()
                 .catch((e) =>
                   setError(
@@ -207,12 +199,13 @@ export function ReminderSettings({
               draft ?? String(preferences.intervalMinutes),
             );
             setError("");
+            const usesClock = selectedWindow === "day" || selectedWindow === "night";
             const next = {
               ...preferences,
               intervalMinutes,
               window: selectedWindow,
-              dayStart: startDraft ?? preferences.dayStart ?? "07:00",
-              dayEnd: endDraft ?? preferences.dayEnd ?? "19:00",
+              dayStart: (usesClock ? startDraft : null) ?? preferences.dayStart ?? "07:00",
+              dayEnd: (usesClock ? endDraft : null) ?? preferences.dayEnd ?? "19:00",
             };
             parseClock(next.dayStart);
             parseClock(next.dayEnd);

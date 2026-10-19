@@ -30,3 +30,7 @@ Use native-driver opacity/translation/scale for short entrances, tab changes, pr
 ## Local learning reminders
 
 Reminder preferences are device settings stored separately from quiz profiles/backups. `useLearningReminders` serializes storage and OS scheduling, reconciles existing schedules on launch/resume, and listens for taps. The native notification adapter owns one recurring learning schedule; the web adapter reports native-only delivery. Removing a learner cancels its schedule, and linking Google preserves the same preferences.
+
+## Responsive rendering
+
+ScreenHost updates a subtree when it becomes hidden so media stops, then memoizes parent-driven changes until activation. The subtree stays mounted, preserving local edits and scroll. Library and Progress own FlatLists (no nested vertical ScrollView); each renders a small window with stable question keys. Resource rows and explanation components are memoized. Tabs reveal immediately; only newly entered questions use a short entrance. Submission renders feedback beside the answer controls; explanation scrolling is an explicit action.

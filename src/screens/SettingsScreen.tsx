@@ -1,7 +1,8 @@
+import { confirmAction, showMessage } from "../platform/dialogs";
 import { ReminderSettings } from "../components/ReminderSettings";
 import type { useLearningReminders } from "../hooks/useLearningReminders";
 import React from "react";
-import { Alert, Linking, Text, TextInput, View } from "react-native";
+import { Linking, Text, TextInput, View } from "react-native";
 import type { UserProgress } from "../domain/models";
 import { Button, Card, IconBadge } from "../ui/primitives";
 import { styles as s } from "../ui/theme";
@@ -59,6 +60,7 @@ export function SettingsScreen({
         </Text>
         <TextInput
           accessibilityLabel="Profile name"
+          editable={!busy}
           value={name}
           onChangeText={onNameChange}
           placeholder={profile.name}
@@ -72,7 +74,7 @@ export function SettingsScreen({
           onPress={onSave}
         />
         <Text style={s.small}>
-          You can leave this tab and return to your unfinished edit.
+          {name === profile.name ? `Saved as ${profile.name}.` : "Unsaved name. Save when you are ready; tab changes keep this edit."}
         </Text>
       </Card>
       <Card tone="teal">
@@ -109,14 +111,7 @@ export function SettingsScreen({
           tone="clay"
           disabled={busy}
           onPress={() =>
-            Alert.alert(
-              "Reset all quiz progress?",
-              "This removes saved attempts on this device. Export a backup first to keep them.",
-              [
-                { text: "Cancel", style: "cancel" },
-                { text: "Reset", style: "destructive", onPress: onReset },
-              ],
-            )
+            confirmAction("Reset all quiz progress?", "This removes saved attempts on this device. Export a backup first to keep them.", "Reset", onReset)
           }
         />
         <Button
@@ -126,14 +121,7 @@ export function SettingsScreen({
           tone="danger"
           disabled={busy}
           onPress={() =>
-            Alert.alert(
-              "Delete local profile?",
-              "Your name and quiz attempts will be removed from this device. Exported backups are not deleted.",
-              [
-                { text: "Cancel", style: "cancel" },
-                { text: "Delete", style: "destructive", onPress: onDelete },
-              ],
-            )
+            confirmAction("Delete local profile?", "Your name and quiz attempts will be removed from this device. Exported backups are not deleted.", "Delete", onDelete)
           }
         />
       </Card>
@@ -149,7 +137,7 @@ export function SettingsScreen({
           onPress={() => {
             void Linking.openURL("https://www.linkedin.com/in/limu0905/").catch(
               () =>
-                Alert.alert(
+                showMessage(
                   "Could not open LinkedIn",
                   "Visit https://www.linkedin.com/in/limu0905/",
                 ),

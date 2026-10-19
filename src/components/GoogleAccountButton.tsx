@@ -12,6 +12,7 @@ export function GoogleAccountButton({
   busy: boolean;
   onPress: () => void;
 }) {
+  const [loadFailed, setLoadFailed] = useState(false);
   const [Native, setNative] = useState<NativeButton | null>(null);
   useEffect(() => {
     if (!googleSignInConfigured) return;
@@ -20,7 +21,9 @@ export function GoogleAccountButton({
       .then((sdk) => {
         if (mounted) setNative(() => sdk.GoogleSigninButton);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (mounted) setLoadFailed(true);
+      });
     return () => {
       mounted = false;
     };
@@ -41,6 +44,11 @@ export function GoogleAccountButton({
             continue learning offline below.
           </Text>
         </>
+      ) : loadFailed ? (
+        <Text style={s.small}>
+          Google sign-in could not load in this build. Continue with your saved
+          local profile; an updated native build may be needed.
+        </Text>
       ) : Native ? (
         <Native
           size={Native.Size.Wide}

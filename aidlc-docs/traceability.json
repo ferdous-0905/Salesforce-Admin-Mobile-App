@@ -72,12 +72,19 @@
     "sources": [
       "src/domain/backup.ts",
       "src/hooks/useVoice.ts",
-      "src/screens/SettingsScreen.tsx"
+      "src/screens/SettingsScreen.tsx",
+      "src/platform/dialogs.ts",
+      "src/platform/dialogs.web.ts",
+      "src/platform/backupTransfer.ts",
+      "src/platform/backupTransfer.web.ts"
     ],
     "tests": [
       "backup round trip reconstructs statistics and rejects malformed histories",
-      "spoken answers map letters and ordinals to actual options"
-    ]
+      "spoken answers map letters and ordinals to actual options",
+      "backup replacement waits for native confirmation and cancellation preserves data",
+      "web confirmations and backup transfer support cancel import download and cleanup"
+    ],
+    "manual": "Settings audit evidence in intents/2026-10-19-settings-audit/evidence.md"
   },
   {
     "id": "M-08",
@@ -135,11 +142,13 @@
       "src/domain/reminderWindows.ts",
       "src/domain/reminders.ts",
       "src/components/ReminderSettings.tsx",
-      "src/notifications/learningReminders.ts"
+      "src/notifications/learningReminders.ts",
+      "src/hooks/readApproximateLocation.ts"
     ],
     "tests": [
       "reminder windows honor day night boundaries, overnight ranges and changing solar times",
-      "restricted schedules replace all-day repeats, refresh without duplicates and cancel fully"
+      "restricted schedules replace all-day repeats, refresh without duplicates and cancel fully",
+      "location lookup handles permission denial and releases a stalled GPS request"
     ],
     "manual": "Window settings persistence, location denial, background delivery within window, timezone changes and solar queue renewal"
   },
@@ -182,5 +191,20 @@
       "library includes reference-only questions without changing exact screenshot or video mappings"
     ],
     "manual": "Android References filter/opening and green passed, coral failed, gold ungraded cards and filters"
+  },
+  {
+    "id": "M-16",
+    "sources": [
+      "src/ui/ScreenHost.tsx",
+      "src/screens/LibraryScreen.tsx",
+      "src/screens/QuizScreen.tsx",
+      "src/components/QuestionExplanation.tsx",
+      "src/ui/primitives.tsx",
+      "src/screens/ProgressScreen.tsx"
+    ],
+    "tests": [
+      "main tab round trips resume the previous Practice view"
+    ],
+    "manual": "Browser interaction, retained state and mounted Library rows in responsive-navigation intent evidence."
   }
 ]

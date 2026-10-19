@@ -33,7 +33,6 @@ interface Props {
   onNext: () => void;
   onHome: () => void;
   scrollRef: React.RefObject<ScrollView | null>;
-  revealAfterSubmit: React.MutableRefObject<boolean>;
 }
 export function QuizScreen({
   visits,
@@ -49,7 +48,6 @@ export function QuizScreen({
   onNext,
   onHome,
   scrollRef,
-  revealAfterSubmit,
 }: Props) {
   const reducedMotion = useReducedMotion();
   const feedbackY = useRef(0);
@@ -58,6 +56,7 @@ export function QuizScreen({
   if (!current) return null;
   const question = current.question;
   const availability = mediaAvailability(question);
+  const requiredAnswers = publicQuestion(question).requiredAnswers;
   function reveal() {
     scrollRef.current?.scrollTo({
       y: feedbackY.current,
@@ -85,9 +84,8 @@ export function QuizScreen({
         </Text>
         <Button title="Practice home" icon="home" secondary onPress={onHome} />
       </View>
-      <Motion key={`${question.questionNumber}:${position}`} active={active}>
+      <Motion key={`${question.questionNumber}:${position}`}>
         <Card>
-          {current.submitted && <ResultBanner correct={current.correct} />}
           <View style={s.row}>
             <View style={s.sectionHeading}>
               <IconBadge name="book" />
@@ -127,7 +125,7 @@ export function QuizScreen({
           )}
           <Text style={s.question}>{question.question}</Text>
           <Text style={s.small}>
-            Select {publicQuestion(question).requiredAnswers} answer(s). Take
+            Select {requiredAnswers} answer(s). Take
             your time.
           </Text>
           {question.options.map((option) => {
@@ -143,7 +141,7 @@ export function QuizScreen({
               <Pressable
                 key={option.id}
                 accessibilityRole={
-                  publicQuestion(question).requiredAnswers === 1
+                  requiredAnswers === 1
                     ? "radio"
                     : "checkbox"
                 }
@@ -217,6 +215,8 @@ export function QuizScreen({
               Listening… Say “option A” or the answer text.
             </Text>
           )}
+          {current.submitted && <ResultBanner correct={current.correct} />}
+          {current.submitted && <ResultBanner correct={current.correct} />}
           {!current.submitted && (
             <Button
               title={busy ? "Saving…" : "Check my understanding"}
@@ -226,7 +226,7 @@ export function QuizScreen({
                 !current.selected.length ||
                 (isGradable(question) &&
                   current.selected.length !==
-                    publicQuestion(question).requiredAnswers)
+                    requiredAnswers)
               }
               onPress={onSubmit}
             />
@@ -254,13 +254,9 @@ export function QuizScreen({
             onLayout={(event) => {
               if (index !== position) return;
               feedbackY.current = event.nativeEvent.layout.y;
-              if (revealAfterSubmit.current) {
-                revealAfterSubmit.current = false;
-                requestAnimationFrame(() => requestAnimationFrame(reveal));
-              }
             }}
           >
-            <Motion active={active && index === position}>
+            <View>
               <Card>
                 <QuestionExplanation
                   question={visit.question}
@@ -269,7 +265,7 @@ export function QuizScreen({
                   active={active && index === position}
                 />
               </Card>
-            </Motion>
+            </View>
           </View>
         ) : null,
       )}

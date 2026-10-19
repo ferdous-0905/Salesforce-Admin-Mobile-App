@@ -121,7 +121,7 @@ export function Motion({
     progress.setValue(0);
     const animation = Animated.timing(progress, {
       toValue: 1,
-      duration: 240,
+      duration: 140,
       useNativeDriver: true,
     });
     animation.start();
@@ -188,18 +188,18 @@ export function Button({
         onPress={onPress}
         onPressIn={() => press(0.975)}
         onPressOut={() => press(1)}
-        style={{
+        style={({ pressed }) => ({
           minHeight: 52,
           borderRadius: 16,
           paddingVertical: 15,
           paddingHorizontal: 18,
           backgroundColor: secondary ? palette.background : palette.ink,
-          opacity: disabled ? 0.45 : 1,
+          opacity: disabled ? 0.45 : pressed ? 0.8 : 1,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           gap: 10,
-        }}
+        })}
       >
         <Icon name={icon} color={secondary ? palette.ink : "#fff"} />
         <Text

@@ -20,3 +20,5 @@
 - M-14: Practice shows labelled positive/alert feedback for graded submissions and neutral review for ungraded questions. Mark selected correct/incorrect and missed correct options in question and rationale without revealing grading before submission. Respect reduced motion and researched answer precedence.
 
 - M-15: Library includes references-only questions and a References filter, accurate counts and in-app reading access. Progress colours latest passed/failed/reviewed results distinctly with labels, legend, status filtering and search. Android is the active verification platform; iOS testing deferred by owner.
+
+- M-16: Tab navigation reveals retained content immediately without replaying full-screen entrance motion. Library renders a bounded window of resource cards, hidden screen parent updates do not redraw their retained content, and practice submission keeps the answer viewport stable with explicit explanation access. No grading, progress or media-state regression.

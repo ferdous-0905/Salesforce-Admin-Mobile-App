@@ -59,7 +59,6 @@ function Application() {
     next,
     toggle,
     scroll,
-    revealAfterSubmit,
     submit,
     exportBackup,
     importBackup,
@@ -187,13 +186,12 @@ function Application() {
                 onNext={next}
                 onHome={() => navigate("home")}
                 scrollRef={scroll}
-                revealAfterSubmit={revealAfterSubmit}
               />
             </ScreenHost>
-            <ScreenHost active={page === "library"}>
+            <ScreenHost active={page === "library"} scrollable={false}>
               <LibraryScreen questions={bank} active={page === "library"} />
             </ScreenHost>
-            <ScreenHost active={page === "progress"}>
+            <ScreenHost active={page === "progress"} scrollable={false}>
               <ProgressScreen profile={profile} questions={bank} />
             </ScreenHost>
             <ScreenHost active={page === "settings"}>
