@@ -1,9 +1,15 @@
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { answerFeedback } from "../domain/answerFeedback";
+import {
+  AnswerMarker,
+  ResultBanner,
+  answerPalette,
+} from "../components/AnswerFeedback";
 import React, { useRef, useState } from "react";
 import type { QuizVisit } from "../domain/models";
 import { Pressable, Text, View, type ScrollView } from "react-native";
-import type { PracticeMode, Question, UserProgress } from "../domain/models";
+import type { PracticeMode, UserProgress } from "../domain/models";
 import {
-  acceptedAnswer,
   isGradable,
   publicQuestion,
 } from "../domain/questions";
@@ -45,6 +51,7 @@ export function QuizScreen({
   scrollRef,
   revealAfterSubmit,
 }: Props) {
+  const reducedMotion = useReducedMotion();
   const feedbackY = useRef(0);
   const [mediaSection, setMediaSection] = useState<MediaSection | null>(null);
   const current = visits[position];
@@ -52,10 +59,26 @@ export function QuizScreen({
   const question = current.question;
   const availability = mediaAvailability(question);
   function reveal() {
-    scrollRef.current?.scrollTo({ y: feedbackY.current, animated: true });
+    scrollRef.current?.scrollTo({
+      y: feedbackY.current,
+      animated: !reducedMotion,
+    });
   }
   return (
-    <>
+    <View
+      style={{
+        gap: 20,
+        borderRadius: 22,
+        padding: current.submitted ? 12 : 0,
+        backgroundColor: current.submitted
+          ? current.correct === null
+            ? colors.sun
+            : current.correct
+              ? colors.mint
+              : "#FAE9E5"
+          : "transparent",
+      }}
+    >
       <View style={s.row}>
         <Text style={s.eyebrow}>
           {mode === "failed" ? "REVISIT & GROW" : "EXPLORE & UNDERSTAND"}
@@ -64,6 +87,7 @@ export function QuizScreen({
       </View>
       <Motion key={`${question.questionNumber}:${position}`} active={active}>
         <Card>
+          {current.submitted && <ResultBanner correct={current.correct} />}
           <View style={s.row}>
             <View style={s.sectionHeading}>
               <IconBadge name="book" />
@@ -108,8 +132,13 @@ export function QuizScreen({
           </Text>
           {question.options.map((option) => {
             const selected = current.selected.includes(option.id);
-            const correct =
-              current.submitted && acceptedAnswer(question).includes(option.id);
+            const feedback = answerFeedback(
+              question,
+              option.id,
+              current.selected,
+              current.submitted,
+            );
+            const palette = answerPalette[feedback.state];
             return (
               <Pressable
                 key={option.id}
@@ -118,6 +147,7 @@ export function QuizScreen({
                     ? "radio"
                     : "checkbox"
                 }
+                aria-checked={selected}
                 accessibilityState={{
                   checked: selected,
                   disabled: current.submitted || busy,
@@ -127,17 +157,20 @@ export function QuizScreen({
                 style={({ pressed }) => [
                   s.option,
                   selected && s.selected,
-                  correct && s.correct,
+                  current.submitted && {
+                    backgroundColor: palette.background,
+                    borderColor: palette.ink,
+                  },
                   pressed && { opacity: 0.8 },
                 ]}
               >
                 <Text style={s.optionLetter}>{option.id}</Text>
-                <Text style={s.optionText}>{option.text}</Text>
-                {(selected || correct) && (
-                  <Icon
-                    name={correct ? "check" : "target"}
-                    color={correct ? colors.forest : colors.teal}
-                  />
+                <View style={{ flex: 1, gap: 8 }}>
+                  <Text style={s.optionText}>{option.text}</Text>
+                  {current.submitted && <AnswerMarker {...feedback} />}
+                </View>
+                {selected && !current.submitted && (
+                  <Icon name="target" color={colors.teal} />
                 )}
               </Pressable>
             );
@@ -223,7 +256,7 @@ export function QuizScreen({
               feedbackY.current = event.nativeEvent.layout.y;
               if (revealAfterSubmit.current) {
                 revealAfterSubmit.current = false;
-                reveal();
+                requestAnimationFrame(() => requestAnimationFrame(reveal));
               }
             }}
           >
@@ -260,6 +293,6 @@ export function QuizScreen({
           onPress={onNext}
         />
       </View>
-    </>
+    </View>
   );
 }

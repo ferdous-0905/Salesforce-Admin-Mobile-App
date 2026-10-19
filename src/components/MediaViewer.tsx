@@ -5,7 +5,7 @@ import type { Question } from "../domain/models";
 import { Button, Card } from "../ui/primitives";
 import { styles as s } from "../ui/theme";
 import { QuestionExplanation } from "./QuestionExplanation";
-export type MediaSection = "screenshot" | "video";
+export type MediaSection = "reading" | "screenshot" | "video";
 export function MediaViewer({
   question,
   section,
@@ -20,7 +20,7 @@ export function MediaViewer({
       <SafeAreaView style={s.safe} accessibilityViewIsModal>
         <View style={s.header}>
           <Text style={[s.heading, { flex: 1 }]}>
-            Question #{question?.questionNumber} · Learning media
+            Question #{question?.questionNumber} · Learning resources
           </Text>
           <Button title="Close" icon="close" secondary onPress={onClose} />
         </View>

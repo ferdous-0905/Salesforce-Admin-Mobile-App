@@ -8,7 +8,8 @@
     ],
     "tests": [
       "all 246 source questions preserve valid IDs and answer grading",
-      "SQLite persistence saves, reloads, replaces and deletes a profile"
+      "SQLite persistence saves, reloads, replaces and deletes a profile",
+      "under-review source defects remain ungraded and field-history explanation follows current documentation"
     ]
   },
   {
@@ -20,7 +21,9 @@
       "App.tsx",
       "src/hooks/useLearningSession.ts"
     ],
-    "tests": ["main tab round trips resume the previous Practice view"],
+    "tests": [
+      "main tab round trips resume the previous Practice view"
+    ],
     "manual": "Tab state, scroll and Settings draft round trips on tablet"
   },
   {
@@ -56,7 +59,11 @@
   },
   {
     "id": "M-06",
-    "sources": ["assets/app-icon.png", "assets/adaptive-icon.png", "app.json"],
+    "sources": [
+      "assets/app-icon.png",
+      "assets/adaptive-icon.png",
+      "app.json"
+    ],
     "tests": [],
     "manual": "Launcher icon in native installation"
   },
@@ -74,7 +81,11 @@
   },
   {
     "id": "M-08",
-    "sources": ["ARCHITECTURE.md", "AGENTS.md", "scripts/validate-aidlc.cjs"],
+    "sources": [
+      "ARCHITECTURE.md",
+      "AGENTS.md",
+      "scripts/validate-aidlc.cjs"
+    ],
     "tests": [],
     "manual": "Lifecycle validator and review of evidence"
   },
@@ -103,5 +114,73 @@
       "media library filters expose only mapped questions and support exact question search"
     ],
     "manual": "In-app screenshot viewer and YouTube playback on tablet"
+  },
+  {
+    "id": "M-11",
+    "sources": [
+      "src/domain/reminders.ts",
+      "src/hooks/useLearningReminders.ts",
+      "src/notifications/learningReminders.ts",
+      "src/components/ReminderSettings.tsx"
+    ],
+    "tests": [
+      "learning reminders default hourly and reject invalid intervals",
+      "native reminder scheduler avoids duplicates, replaces intervals and cancels on disable or denied permission"
+    ],
+    "manual": "Native permission, delivery, tap navigation, disable cancellation and reschedule"
+  },
+  {
+    "id": "M-12",
+    "sources": [
+      "src/domain/reminderWindows.ts",
+      "src/domain/reminders.ts",
+      "src/components/ReminderSettings.tsx",
+      "src/notifications/learningReminders.ts"
+    ],
+    "tests": [
+      "reminder windows honor day night boundaries, overnight ranges and changing solar times",
+      "restricted schedules replace all-day repeats, refresh without duplicates and cancel fully"
+    ],
+    "manual": "Window settings persistence, location denial, background delivery within window, timezone changes and solar queue renewal"
+  },
+  {
+    "id": "M-13",
+    "sources": [
+      "src/domain/reminderContent.ts",
+      "src/notifications/learningReminders.ts",
+      "src/hooks/useLearningReminders.ts",
+      "src/components/ReminderSettings.tsx"
+    ],
+    "tests": [
+      "friendly reminder content rotates deterministically and uses only real progress",
+      "notification messages vary between slots and refresh with progress"
+    ],
+    "manual": "Settings example rotation and native lock-screen copy/tap behavior"
+  },
+  {
+    "id": "M-14",
+    "sources": [
+      "src/domain/answerFeedback.ts",
+      "src/components/AnswerFeedback.tsx",
+      "src/screens/QuizScreen.tsx",
+      "src/components/QuestionExplanation.tsx"
+    ],
+    "tests": [
+      "answer feedback labels correct wrong missed and ungraded options without pre-submit spoilers"
+    ],
+    "manual": "Correct and incorrect result screens, option rationale labels, multi-select and screen reader review"
+  },
+  {
+    "id": "M-15",
+    "sources": [
+      "src/domain/resources.ts",
+      "src/screens/LibraryScreen.tsx",
+      "src/components/MediaViewer.tsx",
+      "src/screens/ProgressScreen.tsx"
+    ],
+    "tests": [
+      "library includes reference-only questions without changing exact screenshot or video mappings"
+    ],
+    "manual": "Android References filter/opening and green passed, coral failed, gold ungraded cards and filters"
   }
 ]

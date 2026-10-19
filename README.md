@@ -52,3 +52,23 @@ Read `AGENTS.md`, `ARCHITECTURE.md` and `aidlc-docs/README.md`. Run `npm run che
 ## Accounts and media discovery
 
 The persistent Library tab lists exact question-specific screenshot/video mappings with search and filters. Practice also shows media counts before answering. Screenshots, enlarged images, video playback and online references stay in the app. YouTube needs internet. Google sign-in is integrated but disabled until real public OAuth client IDs are supplied; follow [Google setup](docs/GOOGLE-SIGN-IN.md). Existing local progress is preserved when linking.
+
+## Local browser preview
+
+Run `npm run web`, then open http://localhost:8082. Browser progress uses localStorage separately from native SQLite. Screenshots and videos render in the preview UI. Google login still requires native OAuth configuration; native file backup actions are not adapted for this browser preview. Browser speech depends on browser support and permissions. This is a local preview, not a hosted deployment.
+
+## Creator
+
+Created by **MD Ferdous Akhter**. Connect on [LinkedIn](https://www.linkedin.com/in/limu0905/).
+
+## Learning reminders
+
+Settings → Learning reminders defaults to on, every 60 minutes. Allow system notification permission on Android/iOS, choose a whole-minute interval (1–10080), and save. Turning the switch off cancels the learning schedule; changing the interval replaces it. Notifications are scheduled locally without a server, and tapping resumes the current question or opens practice. Device power-saving, Do Not Disturb and permission settings can delay or hide alerts. Browser preview saves preferences but does not deliver reminders. Installing a new native build is required after adding expo-notifications. Device-specific reminder preferences are separate from quiz backups and survive progress resets.
+
+Reminder delivery windows: All day (default), Daytime, Nighttime, Sunrise to sunset, and Sunset to sunrise. Daytime defaults to 07:00–19:00 and can be edited; nighttime is its complement. Solar windows use an optional approximate foreground location (rounded to two decimals) or manually entered coordinates, calculated offline with SunCalc. No background location tracking. Refresh the location after travelling. Fixed day/night schedules repeat daily when their interval fits the 24-hour cycle and native queue capacity. Solar windows and other intervals queue up to 60 upcoming reminders, renewed when the app opens; Settings displays the queue end date on native. OS delivery delays may cross window boundaries. A new native build is required for the location module.
+
+Friendly notification content rotates 12 playful, curious and aspirational invitations without answer spoilers or pressure. Some slots reflect real explored/passed question counts from the last app refresh. Settings includes a cycling example preview. Compatible all-day/day/night intervals use separate daily clock slots with different copy (the rotation repeats each day); other intervals and solar windows retain a renewable queue of up to 60 dated reminders. Changes to progress refresh scheduled copy without adding duplicate notifications. No live AI service is used.
+
+Practice feedback uses a mint success state for correct submissions and a soft coral alert for incorrect submissions. Question options and per-option reasoning label selected correct/incorrect and missed correct answers with icons and text. Unverified questions remain neutral and unscored; researched-answer precedence is preserved. Explanation scrolling respects Reduce Motion.
+
+Library now includes reference-only questions, a References filter and per-question reference counts; sources open in the in-app reader. Progress highlights latest Passed results in green, Failed in coral and unscored Reviewed in gold, with matching history labels, status filters and search. iOS verification is deferred at the owner’s request; Android is the current test target.

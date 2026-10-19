@@ -28,7 +28,10 @@ assert.equal(
   mapping.length,
   "Duplicate requirement mapping",
 );
-const tests = fs.readFileSync("tests/quiz.test.cjs", "utf8");
+const tests = fs.readdirSync("tests")
+  .filter((file) => file.endsWith(".test.cjs"))
+  .map((file) => fs.readFileSync(`tests/${file}`, "utf8"))
+  .join("\n");
 for (const id of ids) {
   const entry = mapping.find((x) => x.id === id);
   assert.ok(entry, `No traceability: ${id}`);

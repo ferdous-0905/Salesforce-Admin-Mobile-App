@@ -1,3 +1,4 @@
+import { useLearningReminders } from "./src/hooks/useLearningReminders";
 import React from "react";
 import {
   ActivityIndicator,
@@ -70,6 +71,14 @@ function Application() {
     resetProgress,
     removeProfile,
   } = useLearningSession(bank);
+  const reminders = useLearningReminders(
+    profile,
+    () => {
+      if (current) navigate("quiz");
+      else start("random");
+    },
+    bank.length,
+  );
   if (!ready)
     return (
       <SafeAreaView style={s.safe}>
@@ -189,6 +198,7 @@ function Application() {
             </ScreenHost>
             <ScreenHost active={page === "settings"}>
               <SettingsScreen
+                reminders={reminders}
                 profile={profile}
                 name={name}
                 onNameChange={setName}

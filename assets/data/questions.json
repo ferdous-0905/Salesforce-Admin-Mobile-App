@@ -13023,7 +13023,7 @@
     "verifiedAnswer": null,
     "documentExplanation": "",
     "explanation": {
-      "summary": "Undeleting a custom field does not restore its deleted field-history data and may require restoring report or layout references. More than one offered statement can apply, so the single-answer source is ambiguous.",
+      "summary": "Current Salesforce documentation states that restoring a custom field restores its field-history data. Reports and page layouts retain the field if they were not edited during deletion; changed layouts can require repair. Check field-history tracking configuration separately. The options omit these conditions, so this question remains ungraded.",
       "correctOptions": {},
       "incorrectOptions": {},
       "optionExplanations": [
@@ -13031,13 +13031,13 @@
           "optionIndex": 0,
           "optionId": "A",
           "assessment": "discussion",
-          "reason": "Reports may need manual restoration of the field reference."
+          "reason": "The field remains in reports that were not edited during deletion; restoring references can be necessary if a report was changed."
         },
         {
           "optionIndex": 1,
           "optionId": "B",
           "assessment": "discussion",
-          "reason": "Deleted field-history data is not restored with the field."
+          "reason": "Current Salesforce documentation says field-history data is restored. Re-enable tracking if its configuration changed while the field was deleted."
         },
         {
           "optionIndex": 2,
@@ -13049,7 +13049,7 @@
           "optionIndex": 3,
           "optionId": "D",
           "assessment": "discussion",
-          "reason": "Page layouts may require manual repair depending on intervening changes."
+          "reason": "Re-add the field to page layouts changed while it was deleted. Unchanged layouts retain the restored field."
         }
       ]
     },
@@ -13065,11 +13065,17 @@
         "url": "https://help.salesforce.com/s/articleView?id=sf.fields_manually_restore_attributes.htm&language=en_US&release=246.9.0&type=5",
         "publisher": "Salesforce",
         "accessedAt": "2026-10-16"
+      },
+      {
+        "title": "Manage Deleted Custom Fields",
+        "url": "https://help.salesforce.com/s/articleView?id=fields_managing_deleted_fields.htm&language=en_US&type=5",
+        "publisher": "Salesforce",
+        "accessedAt": "2026-10-19"
       }
     ],
     "verificationStatus": "needs_review",
-    "reviewedAt": "2026-10-16",
-    "reviewNotes": "Not scored: the question, options, historical context, or supporting evidence needs further review. Option notes are a study discussion, not a verified answer key."
+    "reviewedAt": "2026-10-19",
+    "reviewNotes": "Not scored: source options make unconditional claims where current Salesforce documentation gives conditional restoration behavior. Field-history explanation corrected against Salesforce Help on 2026-10-19; original source answer A is preserved, not promoted to a verified key."
   },
   {
     "questionNumber": 166,

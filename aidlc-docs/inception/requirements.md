@@ -10,3 +10,13 @@
 - M-08: Human-readable architecture, focused components, explicit props and an AI-DLC change record support maintenance. Verification evidence distinguishes unit tests, native installation and actual interactive checks.
 - M-09: Google native sign-in may supply the learner's name and account identity. Remember the local profile for offline reopening; do not request name entry again on normal relaunch. Preserve guest progress when linking, never merge progress silently between different Google accounts, and never treat imported identity metadata as authenticated. Real sign-in requires the owner's OAuth registration.
 - M-10: A searchable/filterable Library lists every question with mapped screenshots/videos and their counts. Quiz cards show media availability before submission. Reading media records no quiz attempt. Video and image views remain in the app, including player errors and retry actions.
+
+- M-11: Device-local learning reminders default to enabled every 60 minutes after notification permission. Settings can disable/cancel or set a validated interval. Changes persist across restarts without duplicate schedules; taps resume/open practice. Browser preview clearly reports native-only delivery.
+
+- M-12: Reminder windows include all day, editable daytime, its nighttime complement and both solar directions. Approximate optional location stays local. Old reminders retain defaults. Only permitted times are queued; Settings discloses finite queue renewal and OS delays.
+
+- M-13: Reminders rotate friendly, playful and aspirational copy with optional real saved-progress context. Never invent achievements or expose answers. Update queued context after learning; show examples in Settings. Daily copy repeats its rotation across days; bounded queues retain renewal limits.
+
+- M-14: Practice shows labelled positive/alert feedback for graded submissions and neutral review for ungraded questions. Mark selected correct/incorrect and missed correct options in question and rationale without revealing grading before submission. Respect reduced motion and researched answer precedence.
+
+- M-15: Library includes references-only questions and a References filter, accurate counts and in-app reading access. Progress colours latest passed/failed/reviewed results distinctly with labels, legend, status filtering and search. Android is the active verification platform; iOS testing deferred by owner.

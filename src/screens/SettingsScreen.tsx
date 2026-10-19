@@ -1,10 +1,13 @@
+import { ReminderSettings } from "../components/ReminderSettings";
+import type { useLearningReminders } from "../hooks/useLearningReminders";
 import React from "react";
-import { Alert, Text, TextInput, View } from "react-native";
+import { Alert, Linking, Text, TextInput, View } from "react-native";
 import type { UserProgress } from "../domain/models";
 import { Button, Card, IconBadge } from "../ui/primitives";
 import { styles as s } from "../ui/theme";
 import { GoogleAccountButton } from "../components/GoogleAccountButton";
 interface Props {
+  reminders: ReturnType<typeof useLearningReminders>;
   onConnectGoogle: () => void;
   profile: UserProgress;
   name: string;
@@ -17,6 +20,7 @@ interface Props {
   onDelete: () => void;
 }
 export function SettingsScreen({
+  reminders,
   profile,
   name,
   onNameChange,
@@ -32,6 +36,7 @@ export function SettingsScreen({
     <>
       <Text style={s.eyebrow}>MAKE IT YOURS</Text>
       <Text style={s.title}>Your practice space.</Text>
+      <ReminderSettings reminders={reminders} />
       <Card>
         {profile.googleAccount ? (
           <>
@@ -136,6 +141,21 @@ export function SettingsScreen({
         <IconBadge name="book" tone="gold" />
         <Text style={s.heading}>Salesforce Admin Quiz 2026</Text>
         <Text style={s.description}>MD Ferdous AKhter · Version 1.0.0</Text>
+        <Button
+          title="Find me on LinkedIn"
+          icon="external"
+          tone="teal"
+          secondary
+          onPress={() => {
+            void Linking.openURL("https://www.linkedin.com/in/limu0905/").catch(
+              () =>
+                Alert.alert(
+                  "Could not open LinkedIn",
+                  "Visit https://www.linkedin.com/in/limu0905/",
+                ),
+            );
+          }}
+        />
         <Text style={s.small}>
           Independent study app. Not affiliated with or endorsed by Salesforce.
           Source images belong to their respective owners.

@@ -19,6 +19,7 @@ export const ScreenHost = forwardRef<
         zIndex: active ? 1 : 0,
       }}
       pointerEvents={active ? "auto" : "none"}
+      aria-hidden={!active}
       accessibilityElementsHidden={!active}
       importantForAccessibility={active ? "auto" : "no-hide-descendants"}
     >

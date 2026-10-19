@@ -33,3 +33,7 @@ Node 24.22.0; Expo SDK 55 with compatible React Native 0.83.10. Expo telemetry d
 - Device screen was locked during final visual inspection. Onboarding and interactive quiz behavior are not yet visually verified on the device.
 - Added `npm run android:usb` to select JDK 17 and the local Android SDK on macOS.
 - The previous Expo preview build also reports FINISHED. Cloud preview and local debug APKs use different signing keys; do not uninstall an app with real progress merely to switch variants. Export a backup before changing installations.
+
+## Quality check — 19 October 2026
+
+Current evidence supersedes earlier pending Android notification notes: see [device checks](NOTIFICATION-DEVICE-CHECK.md). Background delivery/tap/cancellation passed on Honor tablet; permission denial passed on isolated emulator. See [question review audit](QUESTION-REVIEW-AUDIT.md) for all 46 pending records and Q165 editorial correction. They remain ungraded. All 18 tests and Android bundle pass. The app is not certified store-ready by these checks.

@@ -19,13 +19,14 @@ export function LibraryScreen({
     section: MediaSection;
   } | null>(null);
   const rows = mediaQuestions(questions, filter, search);
+  const referenceQuestionCount = questions.filter(question => question.sources.length > 0).length;
   return (
     <>
-      <Text style={s.eyebrow}>LEARN BY SEEING</Text>
-      <Text style={s.title}>Your visual learning library.</Text>
+      <Text style={s.eyebrow}>YOUR RESOURCE SHELF</Text>
+      <Text style={s.title}>Your learning library.</Text>
       <Text style={s.description}>
-        Find exactly which questions have screenshots and videos. Open them here
-        without recording a quiz attempt.
+        Find question-specific references, screenshots and videos. Open them
+        here without recording a quiz attempt.
       </Text>
       <TextInput
         accessibilityLabel="Search learning media by question number or text"
@@ -35,40 +36,44 @@ export function LibraryScreen({
         style={s.input}
       />
       <View style={s.row}>
-        {(["all", "screenshots", "videos"] as const).map((value) => (
-          <Button
-            key={value}
-            title={
-              value === "all"
-                ? "All media"
-                : value === "screenshots"
-                  ? "Screenshots"
-                  : "Videos"
-            }
-            icon={
-              value === "videos"
-                ? "play"
-                : value === "screenshots"
-                  ? "image"
-                  : "book"
-            }
-            tone={
-              value === "videos"
-                ? "clay"
-                : value === "screenshots"
-                  ? "gold"
-                  : "teal"
-            }
-            secondary={filter !== value}
-            onPress={() => setFilter(value)}
-          />
-        ))}
+        {(["all", "references", "screenshots", "videos"] as const).map(
+          (value) => (
+            <Button
+              key={value}
+              title={
+                value === "all"
+                  ? "All resources"
+                  : value === "references"
+                    ? "References"
+                    : value === "screenshots"
+                      ? "Screenshots"
+                      : "Videos"
+              }
+              icon={
+                value === "videos"
+                  ? "play"
+                  : value === "screenshots"
+                    ? "image"
+                    : "book"
+              }
+              tone={
+                value === "videos"
+                  ? "clay"
+                  : value === "screenshots"
+                    ? "gold"
+                    : "teal"
+              }
+              secondary={filter !== value}
+              onPress={() => setFilter(value)}
+            />
+          ),
+        )}
       </View>
       <Text accessibilityLiveRegion="polite" style={s.small}>
         {rows.length} matching question{rows.length === 1 ? "" : "s"} · Source
-        catalog: 17 with screenshots, 22 with videos.
+        catalog: {referenceQuestionCount} with references, 17 with screenshots, 22 with videos.
       </Text>
-      {rows.map(({ question, screenshotCount, videoCount }) => (
+      {rows.map(({ question, referenceCount, screenshotCount, videoCount }) => (
         <Card key={question.questionNumber}>
           <View style={s.sectionHeading}>
             <IconBadge name="book" tone="teal" />
@@ -76,9 +81,19 @@ export function LibraryScreen({
           </View>
           <Text style={s.description}>{question.question}</Text>
           <Text style={s.small}>
+            {referenceCount} reference{referenceCount === 1 ? "" : "s"} ·{" "}
             {screenshotCount} screenshot{screenshotCount === 1 ? "" : "s"} ·{" "}
             {videoCount} video{videoCount === 1 ? "" : "s"}
           </Text>
+          {referenceCount > 0 && (
+            <Button
+              title={`View ${referenceCount} reference${referenceCount === 1 ? "" : "s"}`}
+              icon="book"
+              tone="teal"
+              secondary
+              onPress={() => setSelected({ question, section: "reading" })}
+            />
+          )}
           {screenshotCount > 0 && (
             <Button
               title={`View ${screenshotCount} screenshot${screenshotCount === 1 ? "" : "s"}`}
@@ -102,8 +117,8 @@ export function LibraryScreen({
       {!rows.length && (
         <Card>
           <Text style={s.description}>
-            No mapped media matches this search. Try another question number or
-            keyword.
+            No learning resources match this search. Try another question number
+            or keyword.
           </Text>
         </Card>
       )}

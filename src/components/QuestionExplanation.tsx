@@ -1,3 +1,5 @@
+import { answerFeedback } from "../domain/answerFeedback";
+import { AnswerMarker, ResultBanner, answerPalette } from "./AnswerFeedback";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -19,7 +21,6 @@ import type {
   LearningScreenshot,
   Question,
 } from "../domain/models";
-import { acceptedAnswer } from "../domain/questions";
 import { resourcesFor, videoEmbedUrl } from "../domain/resources";
 const images: Record<string, number> = {
   "/learning/screenshots/field-permissions.jpg": require("../../assets/learning/screenshots/field-permissions.jpg"),
@@ -106,30 +107,44 @@ export function QuestionExplanation({
   ] as const;
   return (
     <View style={s.panel}>
-      <Text accessibilityRole="header" style={s.heading}>
-        {studyOnly
-          ? "Learning resources"
-          : correct === null
-            ? "Reviewed · not scored"
-            : correct
-              ? "Nicely done!"
-              : "A chance to learn"}
-      </Text>
-      {!studyOnly && (
-        <Text style={s.text}>
-          Your answer:{" "}
-          {selected
-            .map(
-              (id) =>
-                `${id}. ${question.options.find((o) => o.id === id)?.text ?? ""}`,
-            )
-            .join("; ")}
+      {studyOnly ? (
+        <Text accessibilityRole="header" style={s.heading}>
+          Learning resources
         </Text>
-      )}
-      {!studyOnly && correct !== null && (
-        <Text style={s.label}>
-          Researched answer: {acceptedAnswer(question).join(", ")}
-        </Text>
+      ) : (
+        <>
+          <ResultBanner correct={correct} />
+          <Text style={s.heading}>Your answer, compared</Text>
+          {question.options.map((option) => {
+            const feedback = answerFeedback(
+              question,
+              option.id,
+              selected,
+              true,
+            );
+            const palette = answerPalette[feedback.state];
+            return (
+              <View
+                key={option.id}
+                style={[
+                  s.resource,
+                  {
+                    borderLeftWidth: 4,
+                    borderColor: palette.ink,
+                    backgroundColor: palette.background,
+                    padding: 14,
+                    borderRadius: 12,
+                  },
+                ]}
+              >
+                <Text style={s.label}>
+                  {option.id}. {option.text}
+                </Text>
+                <AnswerMarker {...feedback} />
+              </View>
+            );
+          })}
+        </>
       )}
       <Text style={s.small}>
         All explanations are unlocked. Select a section below.
@@ -190,26 +205,53 @@ export function QuestionExplanation({
               <Text style={s.small}>{question.reviewNotes}</Text>
             )}
             <Text style={s.heading}>Why each option is right or wrong</Text>
-            {question.explanation?.optionExplanations?.map((o) => (
-              <View key={o.optionId} style={s.resource}>
-                <Text style={s.label}>
-                  {o.optionId}. {question.options[o.optionIndex]?.text}
-                </Text>
-                <Text style={s.small}>
-                  {o.assessment === "correct"
-                    ? "Correct option"
-                    : o.assessment === "incorrect"
-                      ? "Not the best answer"
-                      : "Needs review"}
-                </Text>
-                <Text style={s.text}>{o.reason}</Text>
-                <Action
-                  title="Compare with documentation"
-                  icon="book"
-                  onPress={() => setTab("reading")}
-                />
-              </View>
-            ))}
+            {question.explanation?.optionExplanations?.map((o) => {
+              const feedback = answerFeedback(
+                question,
+                o.optionId,
+                studyOnly ? [] : selected,
+                true,
+              );
+              const palette = answerPalette[feedback.state];
+              const label = studyOnly
+                ? feedback.state === "missed"
+                  ? "Correct option"
+                  : feedback.state === "unverified"
+                    ? "Under review · Not scored"
+                    : "Incorrect option"
+                : feedback.label;
+              return (
+                <View
+                  key={o.optionId}
+                  style={[
+                    s.resource,
+                    {
+                      borderLeftWidth: 4,
+                      borderColor: palette.ink,
+                      backgroundColor: palette.background,
+                      padding: 14,
+                      borderRadius: 12,
+                    },
+                  ]}
+                >
+                  <Text style={s.label}>
+                    {o.optionId}.{" "}
+                    {
+                      question.options.find(
+                        (option) => option.id === o.optionId,
+                      )?.text
+                    }
+                  </Text>
+                  <AnswerMarker state={feedback.state} label={label} />
+                  <Text style={s.text}>{o.reason}</Text>
+                  <Action
+                    title="Compare with documentation"
+                    icon="book"
+                    onPress={() => setTab("reading")}
+                  />
+                </View>
+              );
+            })}
             {!!question.documentExplanation && (
               <>
                 <Action

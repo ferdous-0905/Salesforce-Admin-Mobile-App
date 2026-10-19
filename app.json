@@ -15,7 +15,9 @@
     },
     "android": {
       "package": "com.mdferdousakhter.salesforceadminquiz2026",
-      "permissions": ["android.permission.RECORD_AUDIO"],
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#005044"
@@ -29,6 +31,13 @@
         {
           "microphonePermission": "Allow this app to hear your spoken quiz answers.",
           "speechRecognitionPermission": "Allow this app to recognize spoken quiz answers."
+        }
+      ],
+      "expo-notifications",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow approximate location to calculate your learning reminder sunrise and sunset times."
         }
       ]
     ],

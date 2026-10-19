@@ -65,9 +65,10 @@ export function videoEmbedUrl(resource: LearningResource): string | null {
   return `https://www.youtube.com/embed/${resource.youtubeId}?playsinline=1&autoplay=0&rel=0&start=${resource.startSeconds ?? 0}`;
 }
 
-export type MediaFilter = "all" | "screenshots" | "videos";
+export type MediaFilter = "all" | "references" | "screenshots" | "videos";
 export interface QuestionMedia {
   question: Question;
+  referenceCount: number;
   screenshotCount: number;
   videoCount: number;
 }
@@ -75,6 +76,7 @@ export function mediaAvailability(question: Question): QuestionMedia {
   const resources = resourcesFor(question);
   return {
     question,
+    referenceCount: resources.filter((r) => r.kind === "reading").length,
     screenshotCount: resources.filter((r) => r.kind === "screenshot").length,
     videoCount: resources.filter((r) => r.kind === "video").length,
   };
@@ -89,7 +91,10 @@ export function mediaQuestions(
     .map(mediaAvailability)
     .filter(
       (row) =>
-        (row.screenshotCount > 0 || row.videoCount > 0) &&
+        (row.referenceCount > 0 ||
+          row.screenshotCount > 0 ||
+          row.videoCount > 0) &&
+        (filter !== "references" || row.referenceCount > 0) &&
         (filter !== "screenshots" || row.screenshotCount > 0) &&
         (filter !== "videos" || row.videoCount > 0) &&
         (!query ||

@@ -266,3 +266,236 @@ test("Google linking preserves guest progress, blocks silent account mixing and 
   assert.equal(decodeBackup(exported, bank).googleAccount, undefined);
   assert.equal(decodeBackup(exported, bank).statistics.score, 100);
 });
+
+test("learning reminders default hourly and reject invalid intervals", () => {
+  const {
+    decodeReminders,
+    parseReminderMinutes,
+    reminderNeedsUpdate,
+  } = require("../src/domain/reminders.ts");
+  assert.deepEqual(decodeReminders(null), {
+    enabled: true,
+    intervalMinutes: 60,
+  });
+  assert.deepEqual(decodeReminders('{"enabled":false,"intervalMinutes":120}'), {
+    enabled: false,
+    intervalMinutes: 120,
+  });
+  for (const value of ["0", "-1", "1.5", "abc", "", "10081", "Infinity"])
+    assert.throws(() => parseReminderMinutes(value));
+  assert.equal(parseReminderMinutes(" 90 "), 90);
+  assert.equal(reminderNeedsUpdate(3600, 60), false);
+  assert.equal(reminderNeedsUpdate(3600, 120), true);
+  assert.equal(reminderNeedsUpdate(null, 60), true);
+});
+
+test("reminder windows honor day night boundaries, overnight ranges and changing solar times", () => {
+  const {
+    isReminderTimeAllowed,
+    upcomingWindowReminders,
+  } = require("../src/domain/reminderWindows.ts");
+  const {
+    decodeReminders,
+    validateWindow,
+  } = require("../src/domain/reminders.ts");
+  const base = {
+    enabled: true,
+    intervalMinutes: 60,
+    window: "day",
+    dayStart: "07:00",
+    dayEnd: "19:00",
+  };
+  const local = (hour, minute = 0) => new Date(2026, 9, 19, hour, minute);
+  assert.equal(isReminderTimeAllowed(local(7), base), true);
+  assert.equal(isReminderTimeAllowed(local(19), base), false);
+  assert.equal(
+    isReminderTimeAllowed(local(19), { ...base, window: "night" }),
+    true,
+  );
+  assert.equal(
+    isReminderTimeAllowed(local(6, 59), { ...base, window: "night" }),
+    true,
+  );
+  assert.equal(
+    isReminderTimeAllowed(local(23), {
+      ...base,
+      dayStart: "22:00",
+      dayEnd: "06:00",
+    }),
+    true,
+  );
+  assert.equal(
+    isReminderTimeAllowed(local(7), {
+      ...base,
+      dayStart: "22:00",
+      dayEnd: "06:00",
+    }),
+    false,
+  );
+  const dates = upcomingWindowReminders(base, local(18, 30), 60);
+  assert.equal(dates.length, 60);
+  assert.ok(
+    dates.every(
+      (date) => date > local(18, 30) && isReminderTimeAllowed(date, base),
+    ),
+  );
+  assert.equal(new Set(dates.map(Number)).size, dates.length);
+  assert.throws(() => validateWindow({ ...base, dayStart: "24:00" }));
+  assert.throws(() => validateWindow({ ...base, dayEnd: "07:00" }));
+  assert.throws(() => validateWindow({ ...base, window: "sunrise-sunset" }));
+  assert.throws(() =>
+    validateWindow({ ...base, location: { latitude: 91, longitude: 0 } }),
+  );
+  const solar = {
+    ...base,
+    window: "sunrise-sunset",
+    location: { latitude: 23.81, longitude: 90.41 },
+  };
+  const SunCalc = require("suncalc");
+  for (const month of [0, 5, 9]) {
+    const times = SunCalc.getTimes(new Date(2026, month, 19, 12), 23.81, 90.41);
+    assert.equal(
+      isReminderTimeAllowed(new Date(+times.sunrise + 300000), solar),
+      true,
+    );
+    assert.equal(
+      isReminderTimeAllowed(new Date(+times.sunset + 300000), solar),
+      false,
+    );
+    assert.equal(
+      isReminderTimeAllowed(new Date(+times.sunset + 300000), {
+        ...solar,
+        window: "sunset-sunrise",
+      }),
+      true,
+    );
+  }
+  assert.equal(
+    decodeReminders('{"enabled":true,"intervalMinutes":60}').window,
+    undefined,
+  );
+});
+
+test("friendly reminder content rotates deterministically and uses only real progress", () => {
+  const { reminderMessage } = require("../src/domain/reminderContent.ts");
+  const messages = Array.from({ length: 12 }, (_, i) => reminderMessage(i));
+  assert.equal(new Set(messages.map((m) => m.title)).size, 12);
+  assert.deepEqual(reminderMessage(0), reminderMessage(12));
+  assert.ok(messages.every((m) => m.title.length < 65 && m.body.length < 200));
+  const context = { explored: 6, total: 246, passed: 1, reviewCount: 5 };
+  assert.match(reminderMessage(2, context).body, /6 of 246/);
+  assert.match(reminderMessage(10, context).body, /correct on 1 question\./);
+  assert.doesNotMatch(
+    reminderMessage(2, { ...context, explored: 0 }).body,
+    /explored 0/,
+  );
+  assert.doesNotMatch(
+    JSON.stringify(messages),
+    /guaranteed|falling behind|lose your streak|correct answer is/i,
+  );
+});
+
+test("answer feedback labels correct wrong missed and ungraded options without pre-submit spoilers", () => {
+  const { answerFeedback } = require("../src/domain/answerFeedback.ts");
+  const q = bank.find((q) => isGradable(q) && acceptedAnswer(q).length === 1);
+  const right = acceptedAnswer(q)[0],
+    wrong = q.options.find((o) => !acceptedAnswer(q).includes(o.id)).id;
+  assert.deepEqual(answerFeedback(q, right, [right], false), {
+    state: "neutral",
+    label: "Your selection",
+  });
+  assert.deepEqual(answerFeedback(q, right, [], false), {
+    state: "neutral",
+    label: "",
+  });
+  assert.equal(answerFeedback(q, right, [right], true).state, "correct");
+  assert.equal(answerFeedback(q, right, [wrong], true).state, "missed");
+  assert.equal(answerFeedback(q, wrong, [wrong], true).state, "incorrect");
+  assert.equal(
+    answerFeedback(q, wrong, [right], true).label,
+    "Incorrect option",
+  );
+  const multi = bank.find((q) => isGradable(q) && acceptedAnswer(q).length > 1);
+  const choices = acceptedAnswer(multi);
+  assert.equal(
+    answerFeedback(multi, choices[0], [choices[0]], true).state,
+    "correct",
+  );
+  assert.equal(
+    answerFeedback(multi, choices[1], [choices[0]], true).state,
+    "missed",
+  );
+  const review = bank.find((q) => !isGradable(q));
+  assert.equal(
+    answerFeedback(review, review.options[0].id, [review.options[0].id], true)
+      .state,
+    "unverified",
+  );
+  const conflict = bank.find(
+    (q) => q.verificationStatus === "document_conflict" && isGradable(q),
+  );
+  assert.equal(
+    answerFeedback(
+      conflict,
+      acceptedAnswer(conflict)[0],
+      acceptedAnswer(conflict),
+      true,
+    ).state,
+    "correct",
+  );
+});
+
+test("under-review source defects remain ungraded and field-history explanation follows current documentation", () => {
+  const pending = bank.filter((q) => q.verificationStatus === "needs_review");
+  assert.equal(pending.length, 46);
+  for (const q of pending) assert.equal(isGradable(q), false);
+  for (const number of [86, 221, 224, 246])
+    assert.equal(
+      bank.find((q) => q.questionNumber === number).verificationStatus,
+      "needs_review",
+    );
+  const restored = bank.find((q) => q.questionNumber === 165);
+  assert.match(restored.explanation.summary, /restores its field-history data/);
+  assert.match(
+    restored.explanation.optionExplanations.find((o) => o.optionId === "B")
+      .reason,
+    /field-history data is restored/,
+  );
+  assert.deepEqual(restored.documentAnswer, ["A"]);
+  assert.equal(restored.verifiedAnswer, null);
+});
+
+test("library includes reference-only questions without changing exact screenshot or video mappings", () => {
+  const {
+    mediaQuestions,
+    mediaAvailability,
+    resourcesFor,
+  } = require("../src/domain/resources.ts");
+  const referenceOnly = bank.find(
+    (q) =>
+      q.sources.length &&
+      mediaAvailability(q).screenshotCount === 0 &&
+      mediaAvailability(q).videoCount === 0,
+  );
+  assert.ok(referenceOnly);
+  const row = mediaQuestions(
+    bank,
+    "references",
+    String(referenceOnly.questionNumber),
+  );
+  assert.equal(row.length, 1);
+  assert.equal(
+    row[0].referenceCount,
+    resourcesFor(referenceOnly).filter((r) => r.kind === "reading").length,
+  );
+  assert.ok(
+    mediaQuestions(bank, "all").some(
+      (row) => row.question.questionNumber === referenceOnly.questionNumber,
+    ),
+  );
+  assert.equal(mediaQuestions(bank, "screenshots").length, 17);
+  assert.equal(mediaQuestions(bank, "videos").length, 22);
+  assert.ok(
+    mediaQuestions(bank, "references").every((row) => row.referenceCount > 0),
+  );
+});

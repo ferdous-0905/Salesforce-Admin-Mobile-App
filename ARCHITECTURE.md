@@ -26,3 +26,7 @@ Use native-driver opacity/translation/scale for short entrances, tab changes, pr
 ## Build assets
 
 `app.json` owns the launcher icon and Android adaptive icon configuration. Native changes require a new build. Expo preview builds are standalone; local development builds use Metro through USB forwarding.
+
+## Local learning reminders
+
+Reminder preferences are device settings stored separately from quiz profiles/backups. `useLearningReminders` serializes storage and OS scheduling, reconciles existing schedules on launch/resume, and listens for taps. The native notification adapter owns one recurring learning schedule; the web adapter reports native-only delivery. Removing a learner cancels its schedule, and linking Google preserves the same preferences.
