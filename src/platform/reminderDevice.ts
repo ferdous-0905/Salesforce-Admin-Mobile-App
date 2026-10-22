@@ -20,7 +20,7 @@ export async function readReminderDeviceStatus() {
   return device ? device.getStatus() : null;
 }
 export async function openReminderDeviceSettings(
-  destination: "battery" | "notifications" | "channel",
+  destination: "battery" | "optimization" | "notifications" | "channel",
 ) {
   const device = await deviceModule();
   if (device) await device.openSettings(destination);

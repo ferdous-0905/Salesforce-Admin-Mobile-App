@@ -34,6 +34,9 @@ export function NotificationCheck({ preferences, ready, onRepair }: Props) {
           </Text>
           <Text style={s.small}>Reminder channel: {health.channel}</Text>
           <Text style={s.small}>
+            Banner alerts: {health.bannerCapable ? "Channel supports banners · device settings still apply" : "Not enabled by channel importance"}
+          </Text>
+          <Text style={s.small}>
             Saved reminder requests: {health.scheduled}
             {preferences.enabled
               ? ` / ${health.expected} in the current plan`
@@ -131,11 +134,17 @@ export function NotificationCheck({ preferences, ready, onRepair }: Props) {
             }
           />
           <Button
+            title="Battery optimization settings"
+            icon="settings"
+            secondary
+            onPress={() => void check.settings(() => openReminderDeviceSettings("optimization"))}
+          />
+          <Button
             title="App settings for battery"
             icon="settings"
             secondary
             onPress={() =>
-              void check.repair(() => openReminderDeviceSettings("battery"))
+              void check.settings(() => openReminderDeviceSettings("battery"))
             }
           />
         </>
@@ -148,6 +157,16 @@ export function NotificationCheck({ preferences, ready, onRepair }: Props) {
         battery use if offered. Some manufacturers also have sleeping-app or
         auto-start controls; Android cannot report all of them here. Menu names
         vary.
+      </Text>
+      <Text style={s.small}>
+        After a normal reboot, Android's notification receiver restores saved
+        reminders without opening the app screen. Restricted apps may not receive
+        the boot event until opened. There is no separate Android Background App
+        Refresh permission; manufacturer auto-start switches cannot be checked
+        reliably here. In battery optimization settings, find this app and choose
+        Not optimized if desired. Banner controls may be called Pop on screen or
+        Floating notifications; high importance allows banners but cannot prove
+        they will appear.
       </Text>
       <Text style={s.small}>
         Regular app closure does not require keeping this screen open. After

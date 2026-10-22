@@ -21,10 +21,11 @@ export async function synchronizeReminders(
   repair = false,
 ): Promise<string> {
   const api = await notifications();
-  if (Platform.OS === "android")
+  // Existing channel settings belong to the learner; never replace to bypass their choice.
+  if (Platform.OS === "android" && !(await api.getNotificationChannelAsync(channelId)))
     await api.setNotificationChannelAsync(channelId, {
       name: "Learning reminders",
-      importance: api.AndroidImportance.DEFAULT,
+      importance: api.AndroidImportance.HIGH,
     });
   const scheduled = await api.getAllScheduledNotificationsAsync();
   const ours = scheduled.filter(

@@ -27,13 +27,13 @@ const device = {
   doNotDisturb: false,
 };
 const api = {
-  AndroidImportance: { NONE: 0, DEFAULT: 3 },
+  AndroidImportance: { NONE: 0, DEFAULT: 3, HIGH: 4 },
   SchedulableTriggerInputTypes: {
     TIME_INTERVAL: "timeInterval",
     DATE: "date",
     DAILY: "daily",
   },
-  setNotificationChannelAsync: async () => {},
+  setNotificationChannelAsync: async (_id, settings) => { channel = { ...settings, sound: "default" }; },
   getNotificationChannelAsync: async () => channel,
   getAllScheduledNotificationsAsync: async () => scheduled,
   cancelScheduledNotificationAsync: async (id) => {
@@ -226,7 +226,9 @@ test("notification health reads native date values and surfaces queue, channel a
   assert.equal(repeating.scheduled, 24);
   assert.equal(repeating.expiresAt, null);
   assert.ok(repeating.nextAt > Date.now());
-  assert.deepEqual(notificationIssues(repeating, true), []);
+  assert.equal(repeating.bannerCapable, false);
+  assert.ok(notificationIssues(repeating, true).some((issue) => issue.includes("Banner")));
+  assert.ok(notificationIssues(repeating, true).some((issue) => issue.includes("Battery optimization")));
 });
 
 test("test notification uses the learning channel, respects blocks and is cancelled when reminders are disabled", async () => {
@@ -258,4 +260,20 @@ test("test notification uses the learning channel, respects blocks and is cancel
   );
   await synchronizeReminders({ enabled: false, intervalMinutes: 60 }, true);
   assert.equal(scheduled.length, 0);
+});
+
+ test("new channels support banners while repair and test preserve learner channel choices", async () => {
+  const { readNotificationHealth, scheduleTestNotification } = require("../src/notifications/notificationHealth.ts");
+  const prefs = { enabled: true, intervalMinutes: 60 };
+  allowed = true;
+  channel = null;
+  await synchronizeReminders(prefs, true);
+  assert.equal(channel.importance, 4);
+  assert.equal((await readNotificationHealth(prefs)).bannerCapable, true);
+  channel = { importance: 2, sound: null };
+  await synchronizeReminders(prefs, true, false, undefined, true);
+  await scheduleTestNotification();
+  assert.equal(channel.importance, 2);
+  assert.equal(channel.sound, null);
+  assert.equal((await readNotificationHealth(prefs)).bannerCapable, false);
 });

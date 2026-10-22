@@ -69,6 +69,7 @@ export async function readNotificationHealth(
           : channel.importance === api.AndroidImportance.NONE
             ? "blocked"
             : "enabled",
+    bannerCapable: !!channel && channel.importance >= api.AndroidImportance.HIGH,
     quietChannel:
       !!channel &&
       (channel.importance < api.AndroidImportance.DEFAULT ||
@@ -90,9 +91,9 @@ export async function scheduleTestNotification() {
     const channel = await api.getNotificationChannelAsync(channelId);
     if (channel?.importance === api.AndroidImportance.NONE)
       throw new Error("Unblock the Learning reminders channel first.");
-    await api.setNotificationChannelAsync(channelId, {
+    if (!channel) await api.setNotificationChannelAsync(channelId, {
       name: "Learning reminders",
-      importance: api.AndroidImportance.DEFAULT,
+      importance: api.AndroidImportance.HIGH,
     });
   }
   await api.cancelScheduledNotificationAsync(testId);

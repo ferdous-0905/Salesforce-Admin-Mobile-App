@@ -259,7 +259,8 @@
     "tests": [
       "repair re-registers saved schedules instead of trusting stale records and preserves deduplication",
       "notification health reads native date values and surfaces queue, channel and battery restrictions",
-      "test notification uses the learning channel, respects blocks and is cancelled when reminders are disabled"
+      "test notification uses the learning channel, respects blocks and is cancelled when reminders are disabled",
+      "new channels support banners while repair and test preserve learner channel choices"
     ],
     "manual": "Native build compilation; device sleep/Doze/reboot/OEM checks remain unverified."
   }

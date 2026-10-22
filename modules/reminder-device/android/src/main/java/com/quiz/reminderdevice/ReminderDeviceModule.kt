@@ -38,6 +38,7 @@ class ReminderDeviceModule : Module() {
         "channel" -> Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
           .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
           .putExtra(Settings.EXTRA_CHANNEL_ID, "learning-reminders")
+        "optimization" -> Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
         "battery" -> fallback
         else -> error("Unknown settings destination")
       }

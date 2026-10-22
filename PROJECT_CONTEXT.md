@@ -22,3 +22,6 @@ Progress filters now show search-aware live counts. Counts use metadata only; ca
 ## Generic Android reminder health — 22 October 2026
 
 Resume/launch and explicit Repair re-register native reminder requests even if Expo records survived OS cancellation. Notification check shows permission/channel, saved future schedules, next/expiry and generic battery/background/DND/timing status. One-minute tests use the same channel; settings actions do not grant exemptions. modules/reminder-device is a passive Android Expo module and requires a new APK. 33 checks, native assembleDebug and Android/web exports pass. No physical Doze/reboot/OEM delivery claim. Finite solar/non-clock queues still require reopening before expiry. Original push/build request remains authorized after these fixes.
+
+## Android startup/banner follow-up (22 October 2026)
+Confirmed Expo boot receiver in merged native manifest. Notification check now separates banner channel capability and battery-optimization review; offers standard optimization-list and app-details settings. New channels use HIGH; existing learner channel choices preserved. 34 checks and native Android assemble pass; no physical reboot/OEM delivery verification. These follow-up changes are local and absent from the prior Expo APK. See startup-banner-check intent.

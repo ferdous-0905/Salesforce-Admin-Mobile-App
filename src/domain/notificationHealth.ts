@@ -3,6 +3,7 @@ export interface NotificationHealth {
   permission: boolean;
   channel: "enabled" | "blocked" | "missing" | "not-applicable";
   quietChannel: boolean;
+  bannerCapable: boolean;
   scheduled: number;
   expected: number;
   nextAt: number | null;
@@ -23,6 +24,10 @@ export function notificationIssues(
     issues.push("The Learning reminders channel is blocked.");
   if (health.channel === "missing")
     issues.push("The reminder channel is missing. Repair the schedule.");
+  if (health.channel === "enabled" && !health.bannerCapable)
+    issues.push("Banner alerts are not enabled by channel importance. Open Reminder channel settings and enable Pop on screen / banners if offered.");
+  if (health.device?.batteryOptimizationEnabled)
+    issues.push("Battery optimization is on. Review battery settings if reminders are delayed; the learner must choose any exemption.");
   if (health.quietChannel)
     issues.push("The reminder channel is quiet; alerts may have no sound.");
   if (
