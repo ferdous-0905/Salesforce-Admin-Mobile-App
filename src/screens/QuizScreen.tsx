@@ -1,29 +1,23 @@
-import { useReducedMotion } from "../hooks/useReducedMotion";
 import { answerFeedback } from "../domain/answerFeedback";
 import {
   AnswerMarker,
   ResultBanner,
   answerPalette,
 } from "../components/AnswerFeedback";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import type { QuizVisit } from "../domain/models";
-import { Pressable, Text, View, type ScrollView } from "react-native";
-import type { PracticeMode, UserProgress } from "../domain/models";
-import {
-  isGradable,
-  publicQuestion,
-} from "../domain/questions";
-import { Button, Card, Icon, IconBadge, Motion } from "../ui/primitives";
+import { Pressable, Text, View } from "react-native";
+import type { PracticeMode } from "../domain/models";
+import { isGradable, publicQuestion } from "../domain/questions";
+import { Button, Card, Icon, Motion } from "../ui/primitives";
 import { styles as s, colors } from "../ui/theme";
+import { Disclosure } from "../ui/Disclosure";
 import { QuestionExplanation } from "../components/QuestionExplanation";
 import type { useVoice } from "../hooks/useVoice";
-import { mediaAvailability } from "../domain/resources";
-import { MediaViewer, type MediaSection } from "../components/MediaViewer";
 interface Props {
   visits: QuizVisit[];
   position: number;
   mode: PracticeMode;
-  profile: UserProgress;
   busy: boolean;
   active: boolean;
   voice: ReturnType<typeof useVoice>;
@@ -32,13 +26,11 @@ interface Props {
   onPrevious: () => void;
   onNext: () => void;
   onHome: () => void;
-  scrollRef: React.RefObject<ScrollView | null>;
 }
 export function QuizScreen({
   visits,
   position,
   mode,
-  profile,
   busy,
   active,
   voice,
@@ -47,22 +39,11 @@ export function QuizScreen({
   onPrevious,
   onNext,
   onHome,
-  scrollRef,
 }: Props) {
-  const reducedMotion = useReducedMotion();
-  const feedbackY = useRef(0);
-  const [mediaSection, setMediaSection] = useState<MediaSection | null>(null);
   const current = visits[position];
   if (!current) return null;
   const question = current.question;
-  const availability = mediaAvailability(question);
   const requiredAnswers = publicQuestion(question).requiredAnswers;
-  function reveal() {
-    scrollRef.current?.scrollTo({
-      y: feedbackY.current,
-      animated: !reducedMotion,
-    });
-  }
   return (
     <View
       style={{
@@ -80,38 +61,16 @@ export function QuizScreen({
     >
       <View style={s.row}>
         <Text style={s.eyebrow}>
-          {mode === "failed" ? "REVISIT & GROW" : "EXPLORE & UNDERSTAND"}
+          {mode === "failed" ? "Review practice" : "Practice"}
         </Text>
-        <Button title="Practice home" icon="home" secondary onPress={onHome} />
+        <Button title="Back" icon="previous" secondary onPress={onHome} />
       </View>
       <Motion key={`${question.questionNumber}:${position}`}>
         <Card>
           <View style={s.row}>
             <View style={s.sectionHeading}>
-              <IconBadge name="book" />
               <Text style={s.label}>Question #{question.questionNumber}</Text>
             </View>
-            <Text style={s.small}>
-              Visit {position + 1} · {profile.statistics.score}%
-            </Text>
-          </View>
-          <View style={s.row}>
-            <Button
-              title={availability.screenshotCount + " screenshots"}
-              icon="image"
-              tone="gold"
-              secondary
-              disabled={!availability.screenshotCount}
-              onPress={() => setMediaSection("screenshot")}
-            />
-            <Button
-              title={availability.videoCount + " videos"}
-              icon="play"
-              tone="clay"
-              secondary
-              disabled={!availability.videoCount}
-              onPress={() => setMediaSection("video")}
-            />
           </View>
           {question.verificationStatus === "document_conflict" && (
             <Text style={s.badge}>
@@ -125,8 +84,8 @@ export function QuizScreen({
           )}
           <Text style={s.question}>{question.question}</Text>
           <Text style={s.small}>
-            Select {requiredAnswers} answer(s). Take
-            your time.
+            Select {requiredAnswers}{" "}
+            {requiredAnswers === 1 ? "answer" : "answers"}.
           </Text>
           {question.options.map((option) => {
             const selected = current.selected.includes(option.id);
@@ -140,11 +99,7 @@ export function QuizScreen({
             return (
               <Pressable
                 key={option.id}
-                accessibilityRole={
-                  requiredAnswers === 1
-                    ? "radio"
-                    : "checkbox"
-                }
+                accessibilityRole={requiredAnswers === 1 ? "radio" : "checkbox"}
                 aria-checked={selected}
                 accessibilityState={{
                   checked: selected,
@@ -173,38 +128,40 @@ export function QuizScreen({
               </Pressable>
             );
           })}
-          <Button
-            title={
-              voice.activity === "speaking" ? "Stop reading" : "Hear question"
-            }
-            icon={voice.activity === "speaking" ? "stop" : "speaker"}
-            secondary
-            tone="teal"
-            disabled={busy}
-            onPress={() =>
-              voice.activity === "speaking"
-                ? voice.stop()
-                : void voice.read(
-                    `${question.question}. ${question.options.map((o) => `Option ${o.id}. ${o.text}`).join(". ")}`,
-                  )
-            }
-          />
-          <Button
-            title={
-              voice.activity === "listening"
-                ? "Stop listening"
-                : "Answer with voice"
-            }
-            icon={voice.activity === "listening" ? "stop" : "mic"}
-            secondary
-            tone="violet"
-            disabled={busy || current.submitted}
-            onPress={() =>
-              voice.activity === "listening"
-                ? voice.stop()
-                : void voice.listen()
-            }
-          />
+          <View style={s.row}>
+            <Button
+              title={
+                voice.activity === "speaking" ? "Stop reading" : "Hear question"
+              }
+              icon={voice.activity === "speaking" ? "stop" : "speaker"}
+              secondary
+              tone="teal"
+              disabled={busy}
+              onPress={() =>
+                voice.activity === "speaking"
+                  ? voice.stop()
+                  : void voice.read(
+                      `${question.question}. ${question.options.map((o) => `Option ${o.id}. ${o.text}`).join(". ")}`,
+                    )
+              }
+            />
+            <Button
+              title={
+                voice.activity === "listening"
+                  ? "Stop listening"
+                  : "Answer with voice"
+              }
+              icon={voice.activity === "listening" ? "stop" : "mic"}
+              secondary
+              tone="violet"
+              disabled={busy || current.submitted}
+              onPress={() =>
+                voice.activity === "listening"
+                  ? voice.stop()
+                  : void voice.listen()
+              }
+            />
+          </View>
           {!!voice.message && (
             <Text accessibilityLiveRegion="polite" style={s.small}>
               {voice.message}
@@ -216,32 +173,21 @@ export function QuizScreen({
             </Text>
           )}
           {current.submitted && <ResultBanner correct={current.correct} />}
-          {current.submitted && <ResultBanner correct={current.correct} />}
           {!current.submitted && (
             <Button
-              title={busy ? "Saving…" : "Check my understanding"}
+              title={busy ? "Saving…" : "Check answer"}
               icon="check"
               disabled={
                 busy ||
                 !current.selected.length ||
                 (isGradable(question) &&
-                  current.selected.length !==
-                    requiredAnswers)
+                  current.selected.length !== requiredAnswers)
               }
               onPress={onSubmit}
             />
           )}
         </Card>
       </Motion>
-      {current.submitted && (
-        <Button
-          title="Explore explanation & learning resources"
-          icon="down"
-          tone="violet"
-          secondary
-          onPress={reveal}
-        />
-      )}
       {visits.map((visit, index) =>
         visit.submitted ? (
           <View
@@ -251,29 +197,14 @@ export function QuizScreen({
             importantForAccessibility={
               index === position ? "auto" : "no-hide-descendants"
             }
-            onLayout={(event) => {
-              if (index !== position) return;
-              feedbackY.current = event.nativeEvent.layout.y;
-            }}
           >
-            <View>
-              <Card>
-                <QuestionExplanation
-                  question={visit.question}
-                  selected={visit.selected}
-                  correct={visit.correct}
-                  active={active && index === position}
-                />
-              </Card>
-            </View>
+            <PracticeExplanation
+              visit={visit}
+              active={active && index === position}
+            />
           </View>
         ) : null,
       )}
-      <MediaViewer
-        question={active && mediaSection ? question : null}
-        section={mediaSection ?? "screenshot"}
-        onClose={() => setMediaSection(null)}
-      />
       <View style={s.row}>
         <Button
           title="Previous"
@@ -290,5 +221,30 @@ export function QuizScreen({
         />
       </View>
     </View>
+  );
+}
+
+function PracticeExplanation({
+  visit,
+  active,
+}: {
+  visit: QuizVisit;
+  active: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Disclosure
+      title="Explanation"
+      icon="notes"
+      open={open}
+      onOpenChange={setOpen}
+    >
+      <QuestionExplanation
+        question={visit.question}
+        selected={visit.selected}
+        correct={visit.correct}
+        active={active && open}
+      />
+    </Disclosure>
   );
 }

@@ -1,12 +1,14 @@
+import React from "react";
+import { Linking, Text, TextInput } from "react-native";
 import { confirmAction, showMessage } from "../platform/dialogs";
 import { ReminderSettings } from "../components/ReminderSettings";
-import type { useLearningReminders } from "../hooks/useLearningReminders";
-import React from "react";
-import { Linking, Text, TextInput, View } from "react-native";
-import type { UserProgress } from "../domain/models";
-import { Button, Card, IconBadge } from "../ui/primitives";
-import { styles as s } from "../ui/theme";
 import { GoogleAccountButton } from "../components/GoogleAccountButton";
+import type { useLearningReminders } from "../hooks/useLearningReminders";
+import type { UserProgress } from "../domain/models";
+import { Button } from "../ui/primitives";
+import { Disclosure } from "../ui/Disclosure";
+import { styles as s } from "../ui/theme";
+
 interface Props {
   reminders: ReturnType<typeof useLearningReminders>;
   onConnectGoogle: () => void;
@@ -20,6 +22,7 @@ interface Props {
   onReset: () => void;
   onDelete: () => void;
 }
+
 export function SettingsScreen({
   reminders,
   profile,
@@ -35,56 +38,46 @@ export function SettingsScreen({
 }: Props) {
   return (
     <>
-      <Text style={s.eyebrow}>MAKE IT YOURS</Text>
-      <Text style={s.title}>Your practice space.</Text>
+      <Text style={s.title}>Settings</Text>
       <ReminderSettings reminders={reminders} />
-      <Card>
-        {profile.googleAccount ? (
-          <>
-            <Text style={s.heading}>Google account connected</Text>
-            <Text style={s.small}>{profile.googleAccount.email}</Text>
-            <Text style={s.small}>
-              Your account name is remembered here. Progress remains on this
-              device; Google sign-in does not sync it between devices.
-            </Text>
-          </>
-        ) : (
-          <GoogleAccountButton busy={busy} onPress={onConnectGoogle} />
-        )}
-        <View style={s.sectionHeading}>
-          <IconBadge name="settings" tone="teal" />
-          <Text style={s.heading}>A little more you</Text>
-        </View>
-        <Text style={s.description}>
-          Your name and learning progress stay on this device.
-        </Text>
+      <Disclosure title="Profile" icon="settings" summary={profile.name}>
+        <Text style={s.small}>Your name</Text>
         <TextInput
           accessibilityLabel="Profile name"
           editable={!busy}
           value={name}
           onChangeText={onNameChange}
-          placeholder={profile.name}
           maxLength={80}
           style={s.input}
         />
         <Button
           title="Save name"
           icon="save"
-          disabled={!name.trim() || busy}
+          disabled={!name.trim() || busy || name === profile.name}
           onPress={onSave}
         />
-        <Text style={s.small}>
-          {name === profile.name ? `Saved as ${profile.name}.` : "Unsaved name. Save when you are ready; tab changes keep this edit."}
+        <Text style={s.small} accessibilityLiveRegion="polite">
+          {name === profile.name ? "Saved on this device." : "Unsaved changes"}
         </Text>
-      </Card>
-      <Card tone="teal">
-        <View style={s.sectionHeading}>
-          <IconBadge name="download" tone="teal" />
-          <Text style={s.heading}>Keep your progress safe</Text>
-        </View>
-        <Text style={s.description}>
-          Export a backup before changing phones or uninstalling. Import
-          replaces the local profile and progress.
+        <Disclosure title="Google account" icon="book">
+          {profile.googleAccount ? (
+            <Text style={s.description}>{profile.googleAccount.email}</Text>
+          ) : (
+            <GoogleAccountButton busy={busy} onPress={onConnectGoogle} />
+          )}
+          <Text style={s.small}>
+            Google remembers your identity. Progress stays on this device.
+          </Text>
+        </Disclosure>
+      </Disclosure>
+      <Disclosure
+        title="Backup & restore"
+        icon="download"
+        summary="Move or protect your progress"
+      >
+        <Text style={s.small}>
+          Export before changing devices. Import replaces the current profile
+          and progress.
         </Text>
         <Button
           title="Export progress"
@@ -101,9 +94,11 @@ export function SettingsScreen({
           disabled={busy}
           onPress={onImport}
         />
-      </Card>
-      <Card>
-        <Text style={s.heading}>A fresh start, when you choose</Text>
+      </Disclosure>
+      <Disclosure title="Reset & delete" icon="delete">
+        <Text style={s.small}>
+          Export a backup first. These actions remove local data.
+        </Text>
         <Button
           title="Reset quiz progress"
           secondary
@@ -111,7 +106,12 @@ export function SettingsScreen({
           tone="clay"
           disabled={busy}
           onPress={() =>
-            confirmAction("Reset all quiz progress?", "This removes saved attempts on this device. Export a backup first to keep them.", "Reset", onReset)
+            confirmAction(
+              "Reset all quiz progress?",
+              "This removes saved attempts on this device. Export a backup first to keep them.",
+              "Reset",
+              onReset,
+            )
           }
         />
         <Button
@@ -121,39 +121,47 @@ export function SettingsScreen({
           tone="danger"
           disabled={busy}
           onPress={() =>
-            confirmAction("Delete local profile?", "Your name and quiz attempts will be removed from this device. Exported backups are not deleted.", "Delete", onDelete)
+            confirmAction(
+              "Delete local profile?",
+              "Your name and quiz attempts will be removed from this device. Exported backups are not deleted.",
+              "Delete",
+              onDelete,
+            )
           }
         />
-      </Card>
-      <Card tone="gold">
-        <IconBadge name="book" tone="gold" />
-        <Text style={s.heading}>Salesforce Admin Quiz 2026</Text>
-        <Text style={s.description}>MD Ferdous AKhter · Version 1.0.0</Text>
+      </Disclosure>
+      <Disclosure
+        title="About & privacy"
+        icon="notes"
+        summary="Salesforce Admin Quiz 2026 · 1.0.0"
+      >
+        <Text style={s.description}>Created by MD Ferdous AKhter</Text>
         <Button
           title="Find me on LinkedIn"
           icon="external"
           tone="teal"
           secondary
-          onPress={() => {
+          onPress={() =>
             void Linking.openURL("https://www.linkedin.com/in/limu0905/").catch(
               () =>
                 showMessage(
                   "Could not open LinkedIn",
                   "Visit https://www.linkedin.com/in/limu0905/",
                 ),
-            );
-          }}
+            )
+          }
         />
         <Text style={s.small}>
           Independent study app. Not affiliated with or endorsed by Salesforce.
           Source images belong to their respective owners.
         </Text>
         <Text style={s.small}>
-          No hosted quiz service or analytics. Device speech services may
-          process voice online; videos and external links use third-party
-          services. Microphone access is requested only for voice answering.
+          No analytics or hosted quiz service. Progress stays locally. Device
+          speech services may process voice online; videos and links use
+          third-party services. Microphone access is requested only for voice
+          answers. Reminder location stays on this device.
         </Text>
-      </Card>
+      </Disclosure>
     </>
   );
 }

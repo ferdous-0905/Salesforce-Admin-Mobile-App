@@ -18,6 +18,7 @@ export async function synchronizeReminders(
   hasLearner: boolean,
   requestPermission = false,
   context?: ReminderContext,
+  repair = false,
 ): Promise<string> {
   const api = await notifications();
   if (Platform.OS === "android")
@@ -36,6 +37,7 @@ export async function synchronizeReminders(
       await api.cancelScheduledNotificationAsync(item.identifier);
   };
   if (!preferences.enabled || !hasLearner) {
+    await api.cancelScheduledNotificationAsync("learning-reminder-test");
     await cancelAll();
     return preferences.enabled
       ? "Reminders start after you create a learner profile."
@@ -82,13 +84,16 @@ export async function synchronizeReminders(
   const desired = new Set(plan.map((item) => item.id));
   for (const item of ours)
     if (
+      repair ||
       !desired.has(item.identifier) ||
       item.content.data?.windowSignature !== signature
     )
       await api.cancelScheduledNotificationAsync(item.identifier);
   const existing = new Set(
     ours
-      .filter((item) => item.content.data?.windowSignature === signature)
+      .filter(
+        (item) => !repair && item.content.data?.windowSignature === signature,
+      )
       .map((item) => item.identifier),
   );
   for (const item of plan) {

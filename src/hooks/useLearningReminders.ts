@@ -46,15 +46,14 @@ export function useLearningReminders(
   const operation = useRef(false);
   const current = useRef(preferences);
   current.current = preferences;
-  function enqueue(action: () => Promise<void>) {
-    queue.current = queue.current
-      .then(action)
-      .catch(() =>
-        setMessage(
-          "Could not configure reminders. Retry here; a native app rebuild may be required.",
-        ),
-      );
-    return queue.current;
+  function enqueue(action: () => Promise<void>, propagateFailure = false) {
+    const result = queue.current.then(action);
+    queue.current = result.catch(() =>
+      setMessage(
+        "Could not configure reminders. Retry here; a native app rebuild may be required.",
+      ),
+    );
+    return propagateFailure ? result : queue.current;
   }
   useEffect(() => {
     let mounted = true;
@@ -85,6 +84,7 @@ export function useLearningReminders(
           hasLearner,
           askPermission,
           latestContext.current,
+          true,
         ),
       );
     });
@@ -97,6 +97,7 @@ export function useLearningReminders(
               hasLearner,
               false,
               latestContext.current,
+              true,
             ),
           );
         });
@@ -144,6 +145,18 @@ export function useLearningReminders(
     busy,
     message,
     update,
+    repair: () =>
+      enqueue(async () => {
+        setMessage(
+          await synchronizeReminders(
+            current.current,
+            hasLearner,
+            false,
+            latestContext.current,
+            true,
+          ),
+        );
+      }, true),
     previews: [
       reminderMessage(0, context),
       reminderMessage(2, context),

@@ -51,7 +51,7 @@ export function ResultBanner({ correct }: { correct: boolean | null }) {
       <View style={f.icon}>
         <Icon
           name={correct === true ? "spark" : palette.icon}
-          size={28}
+          size={20}
           color={palette.ink}
         />
       </View>
@@ -61,17 +61,10 @@ export function ResultBanner({ correct }: { correct: boolean | null }) {
           style={[f.title, { color: palette.ink }]}
         >
           {correct === null
-            ? "Reviewed, without a score"
+            ? "Not scored · Under review"
             : correct
-              ? "That’s right!"
-              : "Not quite. Let’s learn why."}
-        </Text>
-        <Text style={f.body}>
-          {correct === null
-            ? "This question needs verification. Explore the notes; it will not affect your score."
-            : correct
-              ? "You connected the dots. Explore the explanation to make the idea stick."
-              : "Your choice is marked below, alongside the correct answer. Take a moment to understand the difference."}
+              ? "Correct"
+              : "Not quite"}
         </Text>
       </View>
     </View>
@@ -89,12 +82,12 @@ const f = StyleSheet.create({
     borderWidth: 1,
     borderLeftWidth: 5,
     borderRadius: 18,
-    padding: 18,
+    padding: 14,
     flexDirection: "row",
     gap: 14,
     alignItems: "flex-start",
   },
   icon: { paddingTop: 3 },
-  title: { fontSize: 22, lineHeight: 29, fontWeight: "800" },
+  title: { fontSize: 18, lineHeight: 24, fontWeight: "800" },
   body: { color: colors.ink, fontSize: 15, lineHeight: 23 },
 });

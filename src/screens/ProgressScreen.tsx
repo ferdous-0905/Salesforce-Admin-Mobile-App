@@ -1,8 +1,39 @@
 import React, { useState, useMemo, useCallback, memo } from "react";
 import { FlatList, Text, TextInput, View } from "react-native";
 import type { Question, UserProgress } from "../domain/models";
-import { Button, Card, Icon, IconBadge } from "../ui/primitives";
-import { styles as s, colors, toneColors } from "../ui/theme";
+import {
+  progressQuestions,
+  progressFilterCounts,
+  matchesProgressFilter,
+  type ProgressQuestion,
+  type ProgressFilter,
+  type ProgressOrder,
+} from "../domain/progressView";
+import { Button, Card } from "../ui/primitives";
+import { Disclosure } from "../ui/Disclosure";
+import { QuestionAnswers } from "../ui/QuestionAnswers";
+import { styles as s, type Tone } from "../ui/theme";
+
+const filters: { value: ProgressFilter; label: string }[] = [
+  { value: "all", label: "All questions" },
+  { value: "attempted", label: "Attempted" },
+  { value: "unattempted", label: "Not attempted" },
+  { value: "passed", label: "Passed" },
+  { value: "failed", label: "Failed" },
+  { value: "reviewed", label: "Reviewed" },
+];
+const statusLabels = {
+  passed: "Passed",
+  failed: "Failed",
+  reviewed: "Reviewed · Not scored",
+  unattempted: "Not attempted",
+};
+const statusTones: Record<ProgressQuestion["status"], Tone | undefined> = {
+  passed: "forest",
+  failed: "danger",
+  reviewed: "gold",
+  unattempted: undefined,
+};
 export function ProgressScreen({
   profile,
   questions,
@@ -10,26 +41,31 @@ export function ProgressScreen({
   profile: UserProgress;
   questions: readonly Question[];
 }) {
-  const [filter, setFilter] = useState<
-    "all" | "passed" | "failed" | "reviewed"
-  >("all");
+  const [filter, setFilter] = useState<ProgressFilter>("all");
+  const [order, setOrder] = useState<ProgressOrder>("serial");
   const [search, setSearch] = useState("");
-  const questionText = useMemo(() => new Map(questions.map(q => [q.questionNumber, q.question])), [questions]);
-  const query = search.trim().replace(/^#/, "").toLowerCase();
-  const rows = Object.values(profile.questions)
-    .filter(
-      (p) =>
-        (filter === "all" || p.status === filter) &&
-        (!query ||
-          (/^\d+$/.test(query)
-            ? String(p.questionNumber) === query
-            : questionText.get(p.questionNumber)?.toLowerCase()
-                .includes(query))),
-    )
-    .sort((a, b) => b.lastAttemptAt.localeCompare(a.lastAttemptAt));
-  const renderResult = useCallback(({ item }: { item: UserProgress["questions"][string] }) => (
-    <ProgressCard result={item} question={questionText.get(item.questionNumber) ?? ""} />
-  ), [questionText]);
+  const matchingQuestions = useMemo(
+    () => progressQuestions(questions, profile, "all", search, order),
+    [questions, profile, search, order],
+  );
+  const counts = useMemo(
+    () => progressFilterCounts(matchingQuestions),
+    [matchingQuestions],
+  );
+  const rows = useMemo(
+    () => matchingQuestions.filter((row) => matchesProgressFilter(row, filter)),
+    [matchingQuestions, filter],
+  );
+  const attempted = useMemo(
+    () =>
+      questions.filter((q) => profile.questions[String(q.questionNumber)])
+        .length,
+    [questions, profile],
+  );
+  const renderResult = useCallback(
+    ({ item }: { item: ProgressQuestion }) => <ProgressCard item={item} />,
+    [],
+  );
   return (
     <FlatList
       data={rows}
@@ -40,225 +76,138 @@ export function ProgressScreen({
       windowSize={5}
       contentContainerStyle={s.body}
       keyboardShouldPersistTaps="handled"
-      ListHeaderComponent={<View style={{ gap: 20 }}>
-            <Text style={s.eyebrow}>YOUR LEARNING JOURNEY</Text>
-            <Text style={s.title}>{"Small steps.\nGrowing confidence."}</Text>
-            <Card tone="violet">
-              <View style={s.sectionHeading}>
-                <IconBadge name="progress" tone="violet" />
-                <Text style={s.heading}>Look how far you’ve come</Text>
-              </View>
-              <Text style={s.description}>
-                Progress comes from understanding, including the questions you
-                revisit.
-              </Text>
-              <View
-                style={{
-                  height: 10,
-                  borderRadius: 8,
-                  backgroundColor: "#DDD6EF",
-                  overflow: "hidden",
-                }}
-              >
-                <View
-                  style={{
-                    height: 10,
-                    borderRadius: 8,
-                    backgroundColor: colors.violet,
-                    width: `${Math.min(100, profile.statistics.score)}%`,
-                  }}
-                />
-              </View>
-              {[
-                ["Current understanding", `${profile.statistics.score}%`],
-                ["Passed", profile.statistics.passed],
-                ["Failed · Ready to revisit", profile.statistics.failed],
-                ["Reviewed without scoring", profile.statistics.reviewed ?? 0],
-                ["Graded attempts", profile.statistics.totalAttempts],
-              ].map(([label, value]) => (
-                <View key={label} style={s.progressRow}>
-                  <Text style={[s.description, { flex: 1 }]}>{label}</Text>
-                  <Text style={s.heading}>{value}</Text>
-                </View>
-              ))}
-            </Card>
-            <Text style={s.heading}>Your questions at a glance</Text>
-            <Text style={s.small}>
-              Green: Passed · Coral: Failed · Gold: Reviewed without scoring. Each
-              card reflects your latest answer.
+      ListHeaderComponent={
+        <View style={{ gap: 20 }}>
+          <Text style={s.title}>Progress</Text>
+          <Card tone="violet">
+            <Text style={s.heading}>
+              {attempted}/{questions.length} attempted
             </Text>
+            <Text style={s.small}>
+              Score {profile.statistics.score}% · {questions.length - attempted}{" "}
+              not attempted · {profile.statistics.totalAttempts} graded attempts
+            </Text>
+            <Text style={s.description}>
+              {profile.statistics.passed} passed · {profile.statistics.failed}{" "}
+              failed · {profile.statistics.reviewed ?? 0} reviewed without
+              scoring
+            </Text>
+          </Card>
+          <Text style={s.small}>
+            Green: Passed · Coral: Failed · Gold: Reviewed · White: Not
+            attempted. Results reflect your latest attempt.
+          </Text>
+          <Disclosure
+            title="Filter & sort"
+            icon="settings"
+            summary={`${filters.find((item) => item.value === filter)?.label} (${counts[filter]}) · ${order === "serial" ? "Question order" : "Recent attempts"}`}
+          >
             <View style={s.row}>
-              {(["all", "passed", "failed", "reviewed"] as const).map((value) => (
+              {filters.map((item) => (
                 <Button
-                  key={value}
-                  title={
-                    value === "all"
-                      ? "All results"
-                      : value === "passed"
-                        ? "Passed"
-                        : value === "failed"
-                          ? "Failed"
-                          : "Reviewed"
-                  }
-                  icon={
-                    value === "passed"
-                      ? "check"
-                      : value === "failed"
-                        ? "close"
-                        : "notes"
-                  }
+                  key={item.value}
+                  title={`${item.label} (${counts[item.value]})`}
+                  icon="notes"
+                  secondary={filter !== item.value}
                   tone={
-                    value === "passed"
+                    item.value === "passed"
                       ? "forest"
-                      : value === "failed"
+                      : item.value === "failed"
                         ? "danger"
-                        : value === "reviewed"
+                        : item.value === "reviewed"
                           ? "gold"
                           : "teal"
                   }
-                  secondary={filter !== value}
-                  onPress={() => setFilter(value)}
+                  onPress={() => setFilter(item.value)}
                 />
               ))}
             </View>
-            <TextInput
-              accessibilityLabel="Search progress by question number or text"
-              placeholder="Question number or keyword"
-              value={search}
-              onChangeText={setSearch}
-              style={s.input}
-            />
-            <Text style={s.small} accessibilityLiveRegion="polite">
-              {rows.length} matching questions
-            </Text>
-            {!Object.keys(profile.questions).length && (
-              <Card>
-                <IconBadge name="leaf" />
-                <Text style={s.description}>
-                  Your journey starts with one question. Each answer is a chance to
-                  understand a little more.
-                </Text>
-              </Card>
-            )}
-            {!rows.length && Object.keys(profile.questions).length > 0 && (
-              <Card>
-                <Text style={s.description}>
-                  No questions match this filter. Try another status or search.
-                </Text>
-              </Card>
-            )}
-      </View>}
+            <View style={s.row}>
+              <Button
+                title="Question order"
+                icon="book"
+                secondary={order !== "serial"}
+                onPress={() => setOrder("serial")}
+              />
+              <Button
+                title="Recent attempts"
+                icon="review"
+                secondary={order !== "recent"}
+                onPress={() => setOrder("recent")}
+              />
+            </View>
+          </Disclosure>
+          <TextInput
+            accessibilityLabel="Search progress by question number or text"
+            placeholder="Question number or keyword"
+            value={search}
+            onChangeText={setSearch}
+            style={s.input}
+          />
+          <Text style={s.small} accessibilityLiveRegion="polite">
+            {rows.length} matching questions ·{" "}
+            {order === "serial"
+              ? "Question number order"
+              : "Latest attempts first"}
+          </Text>
+        </View>
+      }
+      ListEmptyComponent={
+        <Card>
+          <Text style={s.description}>
+            No questions match this filter or search.
+          </Text>
+        </Card>
+      }
     />
   );
 }
-function resultKey(result: UserProgress["questions"][string]) {
-  return String(result.questionNumber);
+function resultKey(item: ProgressQuestion) {
+  return String(item.question.questionNumber);
 }
-const ProgressCard = memo(function ProgressCard({ result: p, question }: {
-  result: UserProgress["questions"][string];
-  question: string;
+const ProgressCard = memo(function ProgressCard({
+  item,
+}: {
+  item: ProgressQuestion;
 }) {
+  const { question, progress, status } = item;
   return (
-        <Card
-          tone={
-            p.status === "passed"
-              ? "forest"
-              : p.status === "failed"
-                ? "danger"
-                : "gold"
-          }
+    <Card tone={statusTones[status]}>
+      <Text style={s.heading}>
+        Question #{question.questionNumber} · {statusLabels[status]}
+      </Text>
+      {progress && (
+        <Text style={s.small}>
+          Attempted · {progress.attempts}{" "}
+          {progress.attempts === 1 ? "attempt" : "attempts"}
+        </Text>
+      )}
+      <Text style={s.description}>{question.question}</Text>
+      <QuestionAnswers question={question} selected={progress?.lastAnswer} />
+      {progress && (
+        <Disclosure
+          title={`Attempt history (${progress.history.length})`}
+          icon="review"
         >
-          <View style={s.sectionHeading}>
-            <IconBadge
-              name={
-                p.status === "passed"
-                  ? "check"
-                  : p.status === "failed"
-                    ? "close"
-                    : "notes"
-              }
-              tone={
-                p.status === "passed"
-                  ? "forest"
-                  : p.status === "failed"
-                    ? "danger"
-                    : "gold"
-              }
-            />
-            <Text style={[s.label, { flex: 1 }]}>
-              Question #{p.questionNumber} ·{" "}
-              {p.status === "failed"
-                ? "Failed · Ready to revisit"
-                : p.status === "passed"
-                  ? "Passed"
-                  : "Reviewed · Not scored"}
-            </Text>
-          </View>
-          <Text style={s.description}>
-            {
-              question
-            }
-          </Text>
-          <Text style={s.small}>
-            {p.attempts} attempts · Last answer: {p.lastAnswer.join(", ")}
-          </Text>
-          {p.history
+          {progress.history
             .slice(-5)
             .reverse()
-            .map((a, i) => (
-              <View
-                key={i}
-                style={{
-                  flexDirection: "row",
-                  gap: 8,
-                  alignItems: "center",
-                  padding: 10,
-                  borderRadius: 10,
-                  backgroundColor:
-                    a.correct === null
-                      ? colors.sun
-                      : a.correct
-                        ? colors.mint
-                        : toneColors.danger.background,
-                }}
-              >
-                <Icon
-                  name={
-                    a.correct === null ? "notes" : a.correct ? "check" : "close"
-                  }
-                  color={
-                    a.correct === null
-                      ? colors.gold
-                      : a.correct
-                        ? colors.forest
-                        : colors.danger
-                  }
-                  size={18}
-                />
-                <Text
-                  style={[
-                    s.small,
-                    {
-                      flex: 1,
-                      color:
-                        a.correct === null
-                          ? colors.gold
-                          : a.correct
-                            ? colors.forest
-                            : colors.danger,
-                    },
-                  ]}
-                >
-                  {new Date(a.attemptedAt).toLocaleString()} ·{" "}
-                  {a.correct === null
-                    ? "Reviewed"
-                    : a.correct
-                      ? "Correct"
-                      : "Incorrect"}{" "}
-                  · {a.submittedAnswers.join(", ")}
-                </Text>
-              </View>
+            .map((attempt, index) => (
+              <Text key={`${attempt.attemptedAt}:${index}`} style={s.small}>
+                {new Date(attempt.attemptedAt).toLocaleString()} ·{" "}
+                {attempt.correct === null
+                  ? "Not scored"
+                  : attempt.correct
+                    ? "Correct"
+                    : "Incorrect"}{" "}
+                · Answer: {attempt.submittedAnswers.join(", ") || "None"}
+              </Text>
             ))}
-        </Card>
+          {progress.history.length > 5 && (
+            <Text style={s.small}>Showing the latest 5 attempts.</Text>
+          )}
+        </Disclosure>
+      )}
+    </Card>
   );
 });

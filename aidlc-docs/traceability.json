@@ -206,5 +206,61 @@
       "main tab round trips resume the previous Practice view"
     ],
     "manual": "Browser interaction, retained state and mounted Library rows in responsive-navigation intent evidence."
+  },
+  {
+    "id": "M-17",
+    "sources": [
+      "src/ui/Disclosure.tsx",
+      "src/screens/DashboardScreen.tsx",
+      "src/screens/QuizScreen.tsx",
+      "src/screens/SettingsScreen.tsx",
+      "src/components/ReminderSettings.tsx",
+      "src/components/QuestionExplanation.tsx",
+      "src/components/AnswerFeedback.tsx"
+    ],
+    "tests": [
+      "main tab round trips resume the previous Practice view",
+      "answer feedback labels correct wrong missed and ungraded options without pre-submit spoilers",
+      "disclosure opens and closes while keeping child drafts mounted",
+      "practice has one result and closing explanation retains the resource tab and deactivates video",
+      "settings keeps secondary content collapsed and retains profile and reminder drafts on reopen"
+    ],
+    "manual": "Expand/collapse, keyboard, draft and explanation retention in simple-learning-ui evidence."
+  },
+  {
+    "id": "M-18",
+    "sources": [
+      "src/domain/progressView.ts",
+      "src/ui/QuestionAnswers.tsx",
+      "src/screens/ProgressScreen.tsx",
+      "src/screens/LibraryScreen.tsx"
+    ],
+    "tests": [
+      "progress overview includes all questions in serial order and filters participation without changing results",
+      "study options show researched correct answers and latest selection but never assert an ungraded answer",
+      "progress screen defaults to serial overview and wires participation filters without recording attempts",
+      "library cards display the full options and correct-answer markers",
+      "progress filter counts include untouched and ungraded questions and respect search"
+    ],
+    "manual": "Browser/device visual check remains unverified; see question-overview intent evidence."
+  },
+  {
+    "id": "M-19",
+    "sources": [
+      "src/notifications/learningReminders.ts",
+      "src/notifications/notificationHealth.ts",
+      "src/hooks/useLearningReminders.ts",
+      "src/hooks/useNotificationHealth.ts",
+      "src/domain/notificationHealth.ts",
+      "src/platform/reminderDevice.ts",
+      "src/components/NotificationCheck.tsx",
+      "modules/reminder-device/android/src/main/java/com/quiz/reminderdevice/ReminderDeviceModule.kt"
+    ],
+    "tests": [
+      "repair re-registers saved schedules instead of trusting stale records and preserves deduplication",
+      "notification health reads native date values and surfaces queue, channel and battery restrictions",
+      "test notification uses the learning channel, respects blocks and is cancelled when reminders are disabled"
+    ],
+    "manual": "Native build compilation; device sleep/Doze/reboot/OEM checks remain unverified."
   }
 ]

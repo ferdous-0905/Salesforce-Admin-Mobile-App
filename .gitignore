@@ -1,10 +1,13 @@
 node_modules/
 .expo/
 dist/
-android/
-ios/
+/android/
+/ios/
 *.jks
 *.keystore
 .env*
 
 !.env.example
+
+modules/**/android/build/
+modules/**/android/.cxx/

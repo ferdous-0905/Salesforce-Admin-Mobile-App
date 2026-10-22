@@ -1,6 +1,7 @@
+import { Disclosure } from "../ui/Disclosure";
 import { answerFeedback } from "../domain/answerFeedback";
-import { AnswerMarker, ResultBanner, answerPalette } from "./AnswerFeedback";
-import React, { memo, useEffect, useState } from "react";
+import { AnswerMarker, answerPalette } from "./AnswerFeedback";
+import React, { memo, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -107,75 +108,43 @@ function QuestionExplanationContent({
   ] as const;
   return (
     <View style={s.panel}>
-      {studyOnly ? (
-        <Text accessibilityRole="header" style={s.heading}>
-          Learning resources
-        </Text>
-      ) : (
-        <>
-          <ResultBanner correct={correct} />
-          <Text style={s.heading}>Your answer, compared</Text>
-          {question.options.map((option) => {
-            const feedback = answerFeedback(
-              question,
-              option.id,
-              selected,
-              true,
-            );
-            const palette = answerPalette[feedback.state];
-            return (
-              <View
-                key={option.id}
-                style={[
-                  s.resource,
-                  {
-                    borderLeftWidth: 4,
-                    borderColor: palette.ink,
-                    backgroundColor: palette.background,
-                    padding: 14,
-                    borderRadius: 12,
-                  },
-                ]}
-              >
-                <Text style={s.label}>
-                  {option.id}. {option.text}
-                </Text>
-                <AnswerMarker {...feedback} />
-              </View>
-            );
-          })}
-        </>
-      )}
-      <Text style={s.small}>
-        All explanations are unlocked. Select a section below.
-      </Text>
       <View style={s.tabs}>
-        {tabs.map(([value, label, icon, tone]) => (
-          <Pressable
-            key={value}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: tab === value }}
-            onPress={() => setTab(value)}
-            style={[
-              s.tab,
-              { flexDirection: "row", alignItems: "center", gap: 8 },
-              tab === value && {
-                backgroundColor: toneColors[tone].background,
-                borderColor: toneColors[tone].ink,
-              },
-            ]}
-          >
-            <Icon name={icon} color={toneColors[tone].ink} size={18} />
-            <Text style={[s.buttonText, { color: toneColors[tone].ink }]}>
-              {label}
-            </Text>
-          </Pressable>
-        ))}
+        {tabs
+          .filter(
+            ([value]) =>
+              value === "notes" ||
+              value === tab ||
+              (value === "reading"
+                ? readings.length
+                : value === "screenshot"
+                  ? shots.length
+                  : clips.length) > 0,
+          )
+          .map(([value, label, icon, tone]) => (
+            <Pressable
+              key={value}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: tab === value }}
+              onPress={() => setTab(value)}
+              style={[
+                s.tab,
+                { flexDirection: "row", alignItems: "center", gap: 8 },
+                tab === value && {
+                  backgroundColor: toneColors[tone].background,
+                  borderColor: toneColors[tone].ink,
+                },
+              ]}
+            >
+              <Icon name={icon} color={toneColors[tone].ink} size={18} />
+              <Text style={[s.buttonText, { color: toneColors[tone].ink }]}>
+                {label}
+              </Text>
+            </Pressable>
+          ))}
       </View>
       <Motion active={active} key={tab} style={{ gap: 16 }}>
         {tab === "notes" && (
           <>
-            <Text style={s.heading}>Study notes</Text>
             <Text style={s.text}>
               {question.explanation?.summary ||
                 question.documentExplanation ||
@@ -195,14 +164,6 @@ function QuestionExplanationContent({
                 {question.documentAnswer.join(", ")}. This question does not
                 affect your score.
               </Text>
-            )}
-            <Text style={s.small}>
-              Documentation reviewed: {question.reviewedAt || "Not recorded"}.
-              Study notes apply the documentation to this scenario; they are not
-              official exam answers.
-            </Text>
-            {!!question.reviewNotes && (
-              <Text style={s.small}>{question.reviewNotes}</Text>
             )}
             <Text style={s.heading}>Why each option is right or wrong</Text>
             {question.explanation?.optionExplanations?.map((o) => {
@@ -244,14 +205,19 @@ function QuestionExplanationContent({
                   </Text>
                   <AnswerMarker state={feedback.state} label={label} />
                   <Text style={s.text}>{o.reason}</Text>
-                  <Action
-                    title="Compare with documentation"
-                    icon="book"
-                    onPress={() => setTab("reading")}
-                  />
                 </View>
               );
             })}
+            <Disclosure title="Source details" icon="book">
+              <Text style={s.small}>
+                Documentation reviewed: {question.reviewedAt || "Not recorded"}.
+                Study notes apply the documentation to this scenario; they are
+                not official exam answers.
+              </Text>
+              {!!question.reviewNotes && (
+                <Text style={s.small}>{question.reviewNotes}</Text>
+              )}
+            </Disclosure>
             {!!question.documentExplanation && (
               <>
                 <Action

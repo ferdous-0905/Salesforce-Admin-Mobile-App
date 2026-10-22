@@ -499,3 +499,95 @@ test("library includes reference-only questions without changing exact screensho
     mediaQuestions(bank, "references").every((row) => row.referenceCount > 0),
   );
 });
+
+test("progress overview includes all questions in serial order and filters participation without changing results", () => {
+  const { progressQuestions } = require("../src/domain/progressView.ts");
+  const [passed, failed] = bank.filter(isGradable);
+  const reviewed = bank.find((q) => !isGradable(q));
+  let profile = blank();
+  for (const [question, correct, time] of [
+    [passed, true, "2026-10-20T10:00:00Z"],
+    [failed, false, "2026-10-21T10:00:00Z"],
+    [reviewed, null, "2026-10-22T10:00:00Z"],
+  ]) {
+    profile = recordAttempt(profile, question, {
+      correct,
+      submittedAnswers: question.options.slice(0, 1).map((o) => o.id),
+      attemptedAt: time,
+    });
+  }
+  const before = JSON.stringify(profile);
+  const rows = progressQuestions([...bank].reverse(), profile);
+  assert.equal(rows.length, 246);
+  assert.deepEqual(
+    rows.map((row) => row.question.questionNumber),
+    Array.from({ length: 246 }, (_, i) => i + 1),
+  );
+  assert.equal(progressQuestions(bank, profile, "attempted").length, 3);
+  assert.equal(progressQuestions(bank, profile, "unattempted").length, 243);
+  for (const status of ["passed", "failed", "reviewed"]) {
+    const matching = progressQuestions(bank, profile, status);
+    assert.equal(matching.length, 1);
+    assert.equal(matching[0].status, status);
+  }
+  assert.equal(
+    progressQuestions(bank, profile, "all", `#${reviewed.questionNumber}`)[0]
+      .status,
+    "reviewed",
+  );
+  const recent = progressQuestions(bank, profile, "all", "", "recent");
+  assert.deepEqual(
+    recent.slice(0, 3).map((row) => row.status),
+    ["reviewed", "failed", "passed"],
+  );
+  assert.equal(recent[3].status, "unattempted");
+  assert.equal(JSON.stringify(profile), before);
+  assert.equal(
+    progressQuestions(bank, blank(), "all").every(
+      (row) => row.status === "unattempted",
+    ),
+    true,
+  );
+});
+
+test("progress filter counts include untouched and ungraded questions and respect search", () => {
+  const {
+    progressQuestions,
+    progressFilterCounts,
+  } = require("../src/domain/progressView.ts");
+  let profile = blank();
+  const graded = bank.find(isGradable),
+    review = bank.find((q) => !isGradable(q));
+  profile = recordAttempt(profile, graded, {
+    submittedAnswers: acceptedAnswer(graded),
+    correct: true,
+    attemptedAt: "2026-10-22T10:00:00Z",
+  });
+  profile = recordAttempt(profile, review, {
+    submittedAnswers: [],
+    correct: null,
+    attemptedAt: "2026-10-22T11:00:00Z",
+  });
+  const before = JSON.stringify(profile);
+  assert.deepEqual(progressFilterCounts(progressQuestions(bank, profile)), {
+    all: 246,
+    attempted: 2,
+    unattempted: 244,
+    passed: 1,
+    failed: 0,
+    reviewed: 1,
+  });
+  assert.deepEqual(
+    progressFilterCounts(
+      progressQuestions(bank, profile, "all", `#${review.questionNumber}`),
+    ),
+    { all: 1, attempted: 1, unattempted: 0, passed: 0, failed: 0, reviewed: 1 },
+  );
+  assert.equal(
+    progressFilterCounts(
+      progressQuestions(bank, profile, "all", "no-matching-question-xyz"),
+    ).all,
+    0,
+  );
+  assert.equal(JSON.stringify(profile), before);
+});

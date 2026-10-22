@@ -176,7 +176,6 @@ function Application() {
                 visits={visits}
                 position={position}
                 mode={mode}
-                profile={profile}
                 busy={busy}
                 active={page === "quiz"}
                 voice={voice}
@@ -185,7 +184,6 @@ function Application() {
                 onPrevious={previous}
                 onNext={next}
                 onHome={() => navigate("home")}
-                scrollRef={scroll}
               />
             </ScreenHost>
             <ScreenHost active={page === "library"} scrollable={false}>

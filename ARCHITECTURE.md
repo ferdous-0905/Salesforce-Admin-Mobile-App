@@ -34,3 +34,15 @@ Reminder preferences are device settings stored separately from quiz profiles/ba
 ## Responsive rendering
 
 ScreenHost updates a subtree when it becomes hidden so media stops, then memoizes parent-driven changes until activation. The subtree stays mounted, preserving local edits and scroll. Library and Progress own FlatLists (no nested vertical ScrollView); each renders a small window with stable question keys. Resource rows and explanation components are memoized. Tabs reveal immediately; only newly entered questions use a short entrance. Submission renders feedback beside the answer controls; explanation scrolling is an explicit action.
+
+## Collapsible learner controls
+
+Disclosure keeps child components mounted while hiding their layout and accessibility subtree. Practice explanation owns its open state per visited question and passes active=false when closed so video/reference/image viewers stop or hide; closing does not discard the resource tab. Settings uses the same disclosure for secondary controls and keeps the reminder switch visible. Result feedback appears once beside answer controls; rationale retains option-level markers and source provenance under Source details.
+
+## Question study and participation overview
+
+QuestionAnswers is a read-only study component shared by Library and Progress. It uses acceptedAnswer/isGradable; source-conflict research wins and ungraded questions never claim a correct answer. ProgressView joins the immutable bank with saved results, preserving missing entries as Not attempted. Sorting/filtering create view data only; no attempts or statistics are written. Progress defaults to serial order and keeps a bounded FlatList, with filter/sort controls under a disclosure.
+
+## Android reminder recovery and health
+
+Expo schedules native alarms and persists requests; request persistence alone does not prove that Android still has the corresponding PendingIntent. Launch/resume and explicit repair re-register owned schedules even when signatures match. A passive local Android Expo module reports platform battery optimization, battery saver, background restriction, DND and exact-alarm capability; it only opens settings on user action and requests no exemptions or new alarm permissions. Notification health reads permission/channel and saved future requests, reports finite queue expiry, and provides a separately identified one-minute test using the same channel. No JS keepalive or foreground service is added. The local module is under modules/reminder-device; .gitignore excludes only root generated Android/iOS projects and nested build artifacts so EAS includes module source.
